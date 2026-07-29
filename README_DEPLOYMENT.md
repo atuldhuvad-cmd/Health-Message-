@@ -1,6 +1,6 @@
-# Health Infographic Studio 2.2
+# Health Infographic Studio 2.2 Final Release
 
-Static mobile deployment candidate for GitHub Pages and Android Chrome.
+Final mobile release for GitHub Pages and Android Chrome.
 
 ## Deploy with GitHub Pages
 
