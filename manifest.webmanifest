@@ -1,0 +1,9 @@
+{
+  "name": "Health Infographic Studio 2.2",
+  "short_name": "Health Studio",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#07131c",
+  "theme_color": "#087f8c",
+  "description": "Health Infographic Studio 2.2 Mobile Deployment Candidate."
+}
