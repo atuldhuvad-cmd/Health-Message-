@@ -2,9 +2,9 @@
   "product": "Health Infographic Studio",
   "release": "2.3 FINAL RELEASE",
   "releaseStatus": "PASS",
-  "sourceFilename": "Health_Infographic_Studio_2_3_PERSONAL_PORTABLE_FILE_ORIGIN_FIX.html",
+  "sourceFilename": "Health_Infographic_Studio_2_3_EMPTY_WEBHOOK_PROTECTION_CANDIDATE.html",
   "finalFilename": "Health_Infographic_Studio_2_3_FINAL_RELEASE.html",
-  "finalSha256": "F15834CA6B48AB468E3FC343BE141CF450E11DA32D40916672FF9598ED544260",
+  "finalSha256": "B08140E1ECF8CE810D7F7E074F770A46A9CEDF575C359ED637008D98DE8CCA2A",
   "protected22": {
     "filename": "Health_Infographic_Studio_2_2_FINAL_RELEASE.html",
     "sha256Before": "CFE0E0F5C9E18FAAE88DAC2491C59CC18FDAF55619C26C8EEB37EB0ACCB28F93",
@@ -67,6 +67,15 @@
     "makePngMetadataHandoff": "USER VERIFIED / PASS",
     "googleDriveUpload": "USER VERIFIED / PASS",
     "telegramSendPhoto": "USER VERIFIED / PASS",
+    "scenarioId": "5798728",
+    "scenarioActive": "USER VERIFIED / PASS",
+    "immediatelyAsDataArrives": "USER VERIFIED / PASS",
+    "noRunOnceAutomaticExecution": "USER VERIFIED / PASS",
+    "exactCurrentPngDelivered": "USER VERIFIED / PASS",
+    "emptyWebhookProtection": "PASS",
+    "pngFilenamePreflight": "PASS",
+    "retrySafety": "PASS",
+    "contractValidationNetworkRequest": false,
     "credentialsEmbedded": false
   },
   "remainingBlockers": []
