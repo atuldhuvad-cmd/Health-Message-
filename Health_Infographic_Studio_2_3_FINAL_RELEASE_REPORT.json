@@ -1,0 +1,73 @@
+{
+  "product": "Health Infographic Studio",
+  "release": "2.3 FINAL RELEASE",
+  "releaseStatus": "PASS",
+  "sourceFilename": "Health_Infographic_Studio_2_3_PERSONAL_PORTABLE_FILE_ORIGIN_FIX.html",
+  "finalFilename": "Health_Infographic_Studio_2_3_FINAL_RELEASE.html",
+  "finalSha256": "F15834CA6B48AB468E3FC343BE141CF450E11DA32D40916672FF9598ED544260",
+  "protected22": {
+    "filename": "Health_Infographic_Studio_2_2_FINAL_RELEASE.html",
+    "sha256Before": "CFE0E0F5C9E18FAAE88DAC2491C59CC18FDAF55619C26C8EEB37EB0ACCB28F93",
+    "sha256After": "CFE0E0F5C9E18FAAE88DAC2491C59CC18FDAF55619C26C8EEB37EB0ACCB28F93",
+    "unchanged": true
+  },
+  "validation": {
+    "nodeCheck": "PASS",
+    "calendar": "365 records / 365 unique dates PASS",
+    "productionRegression": "365/365 PASS",
+    "artworkRegression": "365/365 PASS",
+    "artworkInventory": "37/37 PASS",
+    "heroQa": "365/365 PASS",
+    "actionQa": "1460/1460 PASS",
+    "paletteRegression": "12/12 PASS",
+    "textFit": "365/365 PASS",
+    "geometry": "365/365 PASS",
+    "contrast": "365/365 PASS",
+    "stateRace": "PASS",
+    "pngRegression": "365/365 PASS",
+    "pngDimensions": "1080x1350 PASS",
+    "browserConsoleErrors": 0
+  },
+  "kidneyAcceptance": {
+    "date": "2026-07-30",
+    "topic": "CARE FOR YOUR KIDNEYS",
+    "palettes": {
+      "Clinical Blue-Green": "PASS",
+      "Warm Orange": "PASS",
+      "Deep Ruby": "PASS",
+      "Violet": "PASS"
+    },
+    "manualPalettePreserved": true,
+    "artworkLoading": "5/5 PASS",
+    "artworkRelevance": "5/5 PASS",
+    "originClean": "PASS",
+    "assetSafety": "PASS",
+    "pngExport": "PASS",
+    "download": "PASS"
+  },
+  "localWindows": {
+    "protocol": "file:",
+    "fileOriginFix": "PASS",
+    "artworkTransport": "origin-clean Blob URLs",
+    "directFileArtworkDrawnToCanvas": false,
+    "toBlob": "PASS",
+    "png": "1080x1350 PASS",
+    "downloadReady": "PASS",
+    "consoleErrors": 0
+  },
+  "hostedMobile": {
+    "sameOriginArtwork": "PASS",
+    "responsiveWidths": "360/375/390/412/430 PASS",
+    "pwaRegistration": "PASS",
+    "offlineArtworkCache": "37/37 PASS",
+    "androidWorkflow": "USER VERIFIED / PASS",
+    "publicUrl": "https://atuldhuvad-cmd.github.io/Health-Message-/"
+  },
+  "externalWorkflow": {
+    "makePngMetadataHandoff": "USER VERIFIED / PASS",
+    "googleDriveUpload": "USER VERIFIED / PASS",
+    "telegramSendPhoto": "USER VERIFIED / PASS",
+    "credentialsEmbedded": false
+  },
+  "remainingBlockers": []
+}
