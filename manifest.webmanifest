@@ -1,31 +1,37 @@
 {
-  "name": "Health Infographic Studio",
-  "short_name": "Health Studio",
-  "description": "Health Infographic Studio 2.4 Multi-Year Candidate",
-  "start_url": "./Health_Infographic_Studio_2_4_APP_ICON_CANDIDATE.html",
+  "name": "Health Infographic Studio 2.4",
+  "short_name": "Health Studio 2.4",
+  "start_url": "./Health_Infographic_Studio_2_4_FINAL_RELEASE.html?mode=onetap",
   "scope": "./",
   "display": "standalone",
-  "orientation": "portrait-primary",
+  "orientation": "portrait",
   "background_color": "#07131c",
   "theme_color": "#087f8c",
+  "description": "Health Infographic Studio 2.4 Final Release.",
   "icons": [
     {
-      "src": "./app-icon-192.png",
+      "src": "./health-studio-icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "./app-icon-512.png",
+      "src": "./health-studio-icon-512.png",
       "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./health-studio-icon-180.png",
+      "sizes": "180x180",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "./app-icon-maskable-512.png",
-      "sizes": "512x512",
+      "src": "./Logo.png",
+      "sizes": "1254x1254",
       "type": "image/png",
-      "purpose": "maskable"
+      "purpose": "any"
     }
   ]
 }
