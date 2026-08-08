@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#087f8c"><link rel="manifest" href="./manifest.webmanifest"><link rel="icon" type="image/png" href="./Logo.png"><link rel="apple-touch-icon" href="./Logo.png">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#087f8c"><link rel="manifest" href="./manifest.webmanifest"><link rel="icon" type="image/png" sizes="192x192" href="./app-icon-192.png"><link rel="icon" type="image/png" sizes="512x512" href="./app-icon-512.png"><link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png">
 <title>Health Infographic Studio 2.4 Final Release</title>
 <style>
 :root{font-family:"Segoe UI",Arial,sans-serif;color:#eaf6fb;background:#07131c}*{box-sizing:border-box}
@@ -53,6 +53,10 @@ canvas{display:block;width:100%;height:auto;background:#fff;border-radius:7px}.n
   .brand-header{grid-template-columns:52px 1fr;gap:10px}.app-logo{width:52px;height:52px;border-radius:12px}.brand-copy h1{font-size:20px;margin:5px 0 2px}.brand-copy .sub{font-size:11.5px}
 }
 
+
+#installApp{background:linear-gradient(135deg,#176fcb,#0b4f9c);border-color:#65a9ef;color:#fff}
+#installApp.install-ready{box-shadow:0 0 0 2px #4aa8ff55,0 8px 20px #0005}
+
 </style>
 </head>
 <body>
@@ -60,7 +64,7 @@ canvas{display:block;width:100%;height:auto;background:#fff;border-radius:7px}.n
 <aside class="controls">
 <div class="brand-header"><img class="app-logo" src="./Logo.png" alt="Health Infographic Studio logo"><div class="brand-copy"><span class="eyebrow">2.4 · FINAL RELEASE</span><h1>Health Infographic Studio</h1><p class="sub">Frozen 1.2 composition · 1080 × 1350 English PNG</p></div></div>
 <label for="yearSelect">Year</label><select id="yearSelect"></select>
-<label for="datePicker">Date</label><input id="datePicker" type="date" min="2026-01-01" max="2027-12-31">
+<label for="datePicker">Date</label><input id="datePicker" type="date">
 <div class="navrow three"><button id="prevDay">← Previous</button><button id="today">Today</button><button id="nextDay">Next →</button></div>
 <label for="monthFilter">Month</label><select id="monthFilter"></select>
 <label for="topicSearch">Topic search</label><input id="topicSearch" type="search" placeholder="Search title or category">
@@ -73,6 +77,7 @@ canvas{display:block;width:100%;height:auto;background:#fff;border-radius:7px}.n
   <button id="regenerate">Regenerate</button>
   <button id="download" disabled>Download PNG</button>
   <button id="sharePoster" disabled>Share Poster</button>
+  <button id="installApp" class="wide" type="button">Install App</button>
 </div>
 <div id="status" class="status" role="status" aria-live="polite">Loading artwork…</div>
 <section class="ops"><h2>OPERATIONS</h2><div class="ops-grid"><span>Status</span><b id="opState">DRAFT</b><span>Date</span><b id="opDate">—</b><span>Topic</span><b id="opTopic">—</b><span>Palette</span><b id="opPalette">—</b><span>QA</span><b id="opQA">Not run</b><span>PNG</span><b id="opPNG">Not prepared</b><span>Make</span><b id="opMake">Not configured</b><span>History</span><b id="opHistory">0 records</b></div></section>
@@ -98,7 +103,7 @@ canvas{display:block;width:100%;height:auto;background:#fff;border-radius:7px}.n
 <script>
 'use strict';
 window.addEventListener('error',e=>{const s=document.getElementById('status');if(s){s.className='status bad';s.textContent=`STARTUP ERROR: ${e.message} · line ${e.lineno}`};document.title=`STARTUP ERROR: ${e.message}`});
-const CONTENT_VERSION='2.0.0',ARTWORK_VERSION='2.0-production-artwork-1',RENDERER_VERSION='2.4-final-release';
+const CONTENT_VERSION='2.2.0-health-first-production',ARTWORK_VERSION='2.0-production-artwork-1',RENDERER_VERSION='2.4-final-release.0';
 const palettes={
 clinical:{name:'Clinical Blue–Green',primary:'#087f8c',deep:'#075164',accent:'#35b9a3',soft:'#eaf7f5',line:'#aadbd6'},
 emerald:{name:'Emerald Green',primary:'#087447',deep:'#075136',accent:'#76ae36',soft:'#eef8e9',line:'#b8d8aa'},
@@ -163,13 +168,457 @@ P('organ-donation','ORGAN DONATION AWARENESS','blood','emerald','Accurate inform
 P('occupational','HEALTH AND SAFETY AT WORK','heart','clinical','Hazard control, protective equipment and early reporting prevent occupational injury and illness.',[A('IDENTIFY HAZARDS','Review physical, chemical, biological and ergonomic risks before work begins.'),A('USE PROTECTION CORRECTLY','Wear task-appropriate protective equipment and maintain it properly.'),A('TAKE ERGONOMIC BREAKS','Adjust workstations, vary posture and use safe lifting technique.'),A('REPORT EARLY','Report exposures, injuries and near misses through workplace systems.')],'Safe work is a shared responsibility.','Prevent hazards before harm occurs.'),
 P('women-health','WOMEN’S PREVENTIVE HEALTH','mental','violet','Respectful preventive care across the life course supports women’s physical, reproductive and mental health.',[A('KEEP ROUTINE CHECKS','Use age- and risk-appropriate blood pressure, diabetes and cancer screening.'),A('NOTICE MENSTRUAL CHANGE','Seek assessment for very heavy bleeding, severe pain or persistent cycle changes.'),A('SUPPORT BONE HEALTH','Include weight-bearing activity and appropriate nutrition across adulthood.'),A('PRIORITIZE MENTAL HEALTH','Seek support for persistent anxiety, low mood, violence or overwhelming stress.')],'Every woman deserves informed, respectful care.','Prevention supports lifelong health.'),
 P('men-health','MEN’S PREVENTIVE HEALTH','heart','clinical','Routine screening, mental-health support and safer habits help men prevent avoidable illness and disability.',[A('KNOW YOUR NUMBERS','Check blood pressure, blood sugar, weight and cholesterol as advised.'),A('DO NOT IGNORE SYMPTOMS','Seek care for persistent chest, urinary, sexual or unexplained health changes.'),A('PROTECT MENTAL HEALTH','Talk early about distress, substance use or thoughts of self-harm.'),A('USE PREVENTIVE CARE','Follow age- and risk-appropriate vaccination and cancer-screening advice.')],'Early care is a strength, not a weakness.','Make prevention part of routine life.')
-];
+,
+P('hiv-aids','KNOW HIV. PREVENT. CARE.','cancer','ruby','HIV can be prevented and, with treatment, effectively managed. Testing, prevention and stigma-free support protect health and save lives.',[A('PREVENT TRANSMISSION','Protect yourself and others by using proven prevention methods and safe practices.'),A('KNOW YOUR STATUS','Regular testing helps you know your status early and access timely care.'),A('GET MEDICAL SUPPORT EARLY','Antiretroviral medicines, started early with medical care, keep people living with HIV healthy.'),A('END STIGMA, SPREAD AWARENESS','Talk openly and support people living with HIV without judgement or discrimination.')],'Prevention, testing and care end AIDS as a public health threat.','Know HIV. Know your status.'),
+P('drowning-safety','PREVENT DROWNING, PROTECT LIVES','safe-water','aqua','Drowning is preventable. Constant supervision, swimming skills and safe practices around water protect children and adults alike.',[A('SUPERVISE CONSTANTLY','Protect children by watching them constantly whenever they are near water.'),A('LEARN TO SWIM','Basic swimming skills for children and adults prevent drowning in an emergency.'),A('STAY ALERT, STAY HYDRATED','Supervising adults should avoid alcohol, stay hydrated and remain fully attentive near water.'),A('USE LIFE JACKETS','Wear a properly fitted life jacket during boating or water activities to prevent accidents.')],'A moment of attention can prevent a lifetime of loss.','Stay alert around water, every time.'),
+P('general-health','TOGETHER FOR HEALTH. STAND WITH SCIENCE.','brain','violet','WHO marks its founding by calling for evidence-based, science-led action for the health of people, animals and the planet.',[A('LEARN FROM SCIENCE','Stay informed with trusted, evidence-based health information from qualified sources.'),A('STAY ACTIVE','Regular movement and exercise are simple, evidence-backed pillars of good health.'),A('EAT WELL','Choose a balanced diet built on trusted nutrition science, not fads or myths.'),A('SEEK QUALIFIED CARE','Follow evidence-based guidance and consult qualified health professionals when needed.')],'Together for health. Stand with science.','WHO theme 2026 - evidence-based health for all.'),
+P('zoonoses','PREVENT DISEASE FROM ANIMALS','malaria-dengue','emerald','Diseases can pass between animals and people. Safe animal contact, hygiene and prompt care after bites protect health.',[A('PRACTICE ANIMAL HYGIENE','Wash hands after contact with animals and clean bites or scratches promptly.'),A('PREVENT ANIMAL BITES','Avoid close contact with unfamiliar animals and cover any bite or scratch promptly.'),A('SEEK MEDICAL CARE PROMPTLY','After any animal bite or scratch, seek professional medical support without delay.'),A('RAISE COMMUNITY AWARENESS','Support community efforts and learn to recognise the signs of zoonotic disease early.')],'Protecting animal health protects human health too.','One Health: people, animals and environment together.'),
+P('health-access','HEALTH CARE FOR EVERYONE, EVERYWHERE','first-aid','clinical','Universal health coverage means everyone can access quality health services they need without financial hardship.',[A('KNOW YOUR RIGHTS','Everyone has the right to safe health services without financial hardship.'),A('ACCESS ESSENTIAL SERVICES','Seek out safe, affordable health services in your area.'),A('VISIT A QUALIFIED PROVIDER','Use registered clinics and qualified professionals for reliable, safe care.'),A('ADVOCATE FOR COVERAGE','Advocate for policies that protect safe, universal access to health services for everyone.')],'Health care is a right, not a privilege.','Equitable access, without financial hardship.'),
+P('disability-inclusion','INCLUSION FOR EVERY ABILITY','healthy-ageing','orange','Persons with disabilities deserve full participation, accessibility and dignity across health, work and community life.',[A('SUPPORT ACTIVE PARTICIPATION','Encourage accessible exercise, sport and movement opportunities for all abilities.'),A('ENSURE EARLY SCREENING','Timely screening and assessment help identify support needs and enable early intervention.'),A('ELIMINATE SAFETY BARRIERS','Make homes, workplaces and public spaces safe and accessible for people with disabilities.'),A('CHAMPION INCLUSION','Raise awareness and support equal opportunity, dignity and respect for persons with disabilities.')],'Ability is diverse. Access should be too.','Dignity, participation and equal opportunity for all.'),
+P('nursing','NURSES: THE HEART OF CARE','vaccination','emerald','Nurses deliver vaccination, clinical care and round-the-clock support that keeps health systems running for everyone.',[A('DELIVER IMMUNIZATION CARE','Nurses lead vaccination and immunisation programmes that protect entire communities.'),A('RECOGNISE NURSING WORK','Support and appreciate the vital, round-the-clock work nurses do for patient wellbeing.'),A('TRUST PROFESSIONAL CARE','Nurses provide skilled, compassionate clinical care through every stage of illness and recovery.'),A('SUPPORT VACCINATION DRIVES','Nurses are often the first point of contact for immunisation and preventive health services.')],'Nurses are the backbone of every health system.','Skilled, compassionate care around the clock.'),
+P('pharmacy-safety','TRUSTED MEDICINE, SAFE CARE','vaccination','ruby','Pharmacists ensure medicines and vaccines are safe, correctly dispensed and accessible as part of everyday health care.',[A('DISPENSE SAFELY','Pharmacists ensure vaccines and medicines are stored, dispensed and administered correctly.'),A('ASK YOUR PHARMACIST','Talk to your pharmacist about medicine safety, interactions and correct dosage.'),A('RELY ON EXPERT CARE','Pharmacists provide trusted, professional medicine guidance as part of your care team.'),A('SUPPORT IMMUNISATION ACCESS','Many pharmacies now offer immunisation services, expanding access to preventive care.')],'Pharmacists: trusted experts in every community.','Safe medicines, accessible care.'),
+P('patient-safety','SAFE CARE FOR NONCOMMUNICABLE DISEASES','blood-pressure','clinical','The WHO 2026 theme highlights safe, consistent care for people living with long-term conditions such as heart disease, diabetes and cancer.',[A('MONITOR NCD CARE SAFELY','Regular checks and accurate monitoring reduce risks for people managing long-term conditions.'),A('SPEAK UP FOR SAFETY','Patients and families should feel supported to ask questions and raise safety concerns.'),A('FOLLOW YOUR CARE PLAN','Consistent, correct medicines and balanced meals support safer long-term disease management.'),A('PARTNER WITH YOUR CARE TEAM','Safe care for chronic conditions depends on clear communication with medical professionals.')],'Safe care for life - especially for long-term conditions.','WHO theme 2026: safe care for noncommunicable diseases.')];
 const REF_BY_MD=new Map(REFERENCE_TOPICS.map(t=>[({'hepatitis':'07-28','heart':'09-29','blood':'06-14','yoga':'06-21','mental':'10-10','tobacco':'05-31','nutrition':'09-01','water':'10-15'})[t.id],t]));
 const MONTH_POOLS={
 1:['respiratory','blood-pressure','sleep','diabetes','heart','ageing','mental'],2:['cancer','heart','women-health','child','oral','nutrition','mental'],3:['kidney','vaccination','tuberculosis','oral','women-health','nutrition','hearing'],4:['maternal','newborn','vaccination','occupational','first-aid','heat','food-safety'],5:['heat','tobacco','blood-pressure','women-health','men-health','food-safety','hand-hygiene'],6:['blood','yoga','mosquito','water','nutrition','road-safety','mental'],7:['mosquito','water','hepatitis','food-safety','hand-hygiene','child','first-aid'],8:['nutrition','anaemia','mosquito','maternal','vaccination','eye','road-safety'],9:['heart','nutrition','ageing','diabetes','blood-pressure','oral','mental'],10:['mental','water','eye','women-health','men-health','sleep','cancer'],11:['diabetes','respiratory','tuberculosis','organ-donation','occupational','kidney','nutrition'],12:['blood','respiratory','road-safety','mental','alcohol','vaccination','first-aid']};
+const REFERENCE_TOPICS_2027=REFERENCE_TOPICS.map(t=>({...t}));
+const REF_BY_MD_2027=new Map(REFERENCE_TOPICS_2027.map(t=>[({'hepatitis':'07-28','heart':'09-29','blood':'06-14','yoga':'06-21','mental':'10-10','tobacco':'05-31','nutrition':'09-01','water':'10-15'})[t.id],t]));
+
+// =====================================================================
+// 2.4 HEALTH-FIRST CALENDAR CANDIDATE
+// Priority: India health observance > world/global health observance
+// > unique curated fitness / health message.
+// =====================================================================
+const HEALTH_OBSERVANCES_COMMON = {
+'01-30':{title:'ANTI-LEPROSY DAY — INDIA',topicKey:'respiratory',authority:'INDIA HEALTH OBSERVANCE',sourceType:'GOV_INDIA',priority:1},
+'02-04':{title:'WORLD CANCER DAY',topicKey:'cancer',authority:'GLOBAL HEALTH OBSERVANCE',sourceType:'RECOGNIZED',priority:2},
+'02-10':{title:'NATIONAL DEWORMING DAY',topicKey:'child',authority:'GOVERNMENT OF INDIA HEALTH CAMPAIGN',sourceType:'GOV_INDIA',priority:1},
+'02-15':{title:'INTERNATIONAL CHILDHOOD CANCER DAY',topicKey:'child',authority:'GLOBAL HEALTH OBSERVANCE',sourceType:'RECOGNIZED',priority:2},
+'03-03':{title:'WORLD HEARING DAY',topicKey:'hearing',authority:'WHO HEALTH CAMPAIGN',sourceType:'WHO',priority:2},
+'03-04':{title:'WORLD OBESITY DAY',topicKey:'nutrition',authority:'GLOBAL HEALTH OBSERVANCE',sourceType:'RECOGNIZED',priority:2},
+'03-16':{title:'NATIONAL VACCINATION DAY',topicKey:'vaccination',authority:'WHO INDIA / INDIA HEALTH CAMPAIGN',sourceType:'GOV_INDIA',priority:1},
+'03-20':{title:'WORLD ORAL HEALTH DAY',topicKey:'oral',authority:'GLOBAL HEALTH OBSERVANCE',sourceType:'RECOGNIZED',priority:2},
+'03-21':{title:'WORLD DOWN SYNDROME DAY',topicKey:'child',authority:'UN HEALTH & INCLUSION OBSERVANCE',sourceType:'UN',priority:2},
+'03-24':{title:'WORLD TB DAY',topicKey:'tuberculosis',authority:'WHO GLOBAL PUBLIC HEALTH DAY',sourceType:'WHO',priority:2},
+'04-02':{title:'WORLD AUTISM AWARENESS DAY',topicKey:'child',authority:'UN HEALTH & INCLUSION OBSERVANCE',sourceType:'UN',priority:2},
+'04-07':{title:'WORLD HEALTH DAY',topicKey:'general-health',authority:'WHO GLOBAL PUBLIC HEALTH DAY',sourceType:'WHO',priority:2},
+'04-11':{title:'NATIONAL SAFE MOTHERHOOD DAY',topicKey:'maternal',authority:'INDIA MATERNAL HEALTH OBSERVANCE',sourceType:'GOV_INDIA',priority:1},
+'04-14':{title:'WORLD CHAGAS DISEASE DAY',topicKey:'mosquito',authority:'WHO GLOBAL PUBLIC HEALTH DAY',sourceType:'WHO',priority:2},
+'04-17':{title:'WORLD HAEMOPHILIA DAY',topicKey:'blood',authority:'GLOBAL HEALTH OBSERVANCE',sourceType:'RECOGNIZED',priority:2},
+'04-25':{title:'WORLD MALARIA DAY',topicKey:'mosquito',authority:'WHO GLOBAL PUBLIC HEALTH DAY',sourceType:'WHO',priority:2},
+'04-28':{title:'WORLD DAY FOR SAFETY & HEALTH AT WORK',topicKey:'occupational',authority:'GLOBAL OCCUPATIONAL HEALTH OBSERVANCE',sourceType:'RECOGNIZED',priority:2},
+'05-05':{title:'WORLD HAND HYGIENE DAY',topicKey:'hand-hygiene',authority:'WHO HEALTH CAMPAIGN',sourceType:'WHO',priority:2},
+'05-12':{title:'INTERNATIONAL NURSES DAY',topicKey:'nursing',authority:'GLOBAL HEALTH WORKFORCE OBSERVANCE',sourceType:'RECOGNIZED',priority:2},
+'05-17':{title:'WORLD HYPERTENSION DAY',topicKey:'blood-pressure',authority:'GLOBAL HEALTH OBSERVANCE',sourceType:'RECOGNIZED',priority:2},
+'05-28':{title:'MENSTRUAL HYGIENE DAY',topicKey:'women-health',authority:'GLOBAL HEALTH OBSERVANCE',sourceType:'RECOGNIZED',priority:2},
+'05-31':{title:'WORLD NO TOBACCO DAY',topicKey:'tobacco',authority:'WHO GLOBAL PUBLIC HEALTH DAY',sourceType:'WHO',priority:2},
+'06-07':{title:'WORLD FOOD SAFETY DAY',topicKey:'food-safety',authority:'WHO / UN HEALTH OBSERVANCE',sourceType:'WHO',priority:2},
+'06-14':{title:'WORLD BLOOD DONOR DAY',topicKey:'blood',authority:'WHO GLOBAL PUBLIC HEALTH DAY',sourceType:'WHO',priority:2},
+'06-19':{title:'WORLD SICKLE CELL DAY',topicKey:'anaemia',authority:'GLOBAL HEALTH OBSERVANCE',sourceType:'RECOGNIZED',priority:2},
+'06-21':{title:'INTERNATIONAL DAY OF YOGA',topicKey:'yoga',authority:'UN OBSERVANCE · WHO INDIA CAMPAIGN',sourceType:'UN',priority:2},
+'06-26':{title:'DRUG ABUSE PREVENTION DAY',topicKey:'alcohol',authority:'UN HEALTH & SOCIAL OBSERVANCE',sourceType:'UN',priority:2},
+'07-01':{title:"NATIONAL DOCTORS' DAY — INDIA",topicKey:'vaccination',authority:'INDIA HEALTH WORKFORCE OBSERVANCE',sourceType:'GOV_INDIA',priority:1},
+'07-06':{title:'WORLD ZOONOSES DAY',topicKey:'zoonoses',authority:'GLOBAL HEALTH OBSERVANCE',sourceType:'RECOGNIZED',priority:2},
+'07-11':{title:'WORLD POPULATION DAY — HEALTH FOCUS',topicKey:'women-health',authority:'UN HEALTH & DEVELOPMENT OBSERVANCE',sourceType:'UN',priority:2},
+'07-25':{title:'WORLD DROWNING PREVENTION DAY',topicKey:'drowning-safety',authority:'WHO GLOBAL PUBLIC HEALTH DAY',sourceType:'WHO',priority:2},
+'07-28':{title:'WORLD HEPATITIS DAY',topicKey:'hepatitis',authority:'WHO GLOBAL PUBLIC HEALTH DAY',sourceType:'WHO',priority:2},
+'08-01':{title:'WORLD LUNG CANCER DAY',topicKey:'cancer',authority:'GLOBAL HEALTH AWARENESS DAY',sourceType:'RECOGNIZED',priority:2},
+'08-10':{title:'NATIONAL DEWORMING DAY — AUGUST ROUND',topicKey:'child',authority:'INDIA CHILD HEALTH CAMPAIGN',sourceType:'GOV_INDIA',priority:1},
+'09-10':{title:'WORLD SUICIDE PREVENTION DAY',topicKey:'mental',authority:'GLOBAL MENTAL HEALTH OBSERVANCE',sourceType:'RECOGNIZED',priority:2},
+'09-17':{title:'WORLD PATIENT SAFETY DAY',topicKey:'patient-safety',authority:'WHO GLOBAL PUBLIC HEALTH DAY',sourceType:'WHO',priority:2},
+'09-21':{title:"WORLD ALZHEIMER'S DAY",topicKey:'ageing',authority:'GLOBAL HEALTH OBSERVANCE',sourceType:'RECOGNIZED',priority:2},
+'09-25':{title:'WORLD PHARMACISTS DAY',topicKey:'pharmacy-safety',authority:'GLOBAL HEALTH WORKFORCE OBSERVANCE',sourceType:'RECOGNIZED',priority:2},
+'09-28':{title:'WORLD RABIES DAY',topicKey:'vaccination',authority:'GLOBAL HEALTH OBSERVANCE',sourceType:'RECOGNIZED',priority:2},
+'09-29':{title:'WORLD HEART DAY',topicKey:'heart',authority:'GLOBAL HEALTH OBSERVANCE',sourceType:'RECOGNIZED',priority:2},
+'10-01':{title:'NATIONAL VOLUNTARY BLOOD DONATION DAY',topicKey:'blood',authority:'GOVERNMENT OF INDIA HEALTH OBSERVANCE',sourceType:'GOV_INDIA',priority:1},
+'10-10':{title:'WORLD MENTAL HEALTH DAY',topicKey:'mental',authority:'WHO HEALTH CAMPAIGN',sourceType:'WHO',priority:2},
+'10-12':{title:'WORLD ARTHRITIS DAY',topicKey:'ageing',authority:'GLOBAL HEALTH OBSERVANCE',sourceType:'RECOGNIZED',priority:2},
+'10-15':{title:'GLOBAL HANDWASHING DAY',topicKey:'hand-hygiene',authority:'GLOBAL PUBLIC HEALTH CAMPAIGN',sourceType:'RECOGNIZED',priority:2},
+'10-16':{title:'WORLD FOOD DAY — HEALTHY NUTRITION',topicKey:'nutrition',authority:'UN HEALTH & NUTRITION OBSERVANCE',sourceType:'UN',priority:2},
+'10-20':{title:'WORLD OSTEOPOROSIS DAY',topicKey:'ageing',authority:'GLOBAL HEALTH OBSERVANCE',sourceType:'RECOGNIZED',priority:2},
+'10-24':{title:'WORLD POLIO DAY',topicKey:'vaccination',authority:'GLOBAL IMMUNIZATION OBSERVANCE',sourceType:'RECOGNIZED',priority:2},
+'10-29':{title:'WORLD STROKE DAY',topicKey:'blood-pressure',authority:'GLOBAL HEALTH OBSERVANCE',sourceType:'RECOGNIZED',priority:2},
+'11-07':{title:'NATIONAL CANCER AWARENESS DAY — INDIA',topicKey:'cancer',authority:'INDIA HEALTH AWARENESS OBSERVANCE',sourceType:'GOV_INDIA',priority:1},
+'11-12':{title:'WORLD PNEUMONIA DAY',topicKey:'respiratory',authority:'GLOBAL HEALTH OBSERVANCE',sourceType:'RECOGNIZED',priority:2},
+'11-14':{title:'WORLD DIABETES DAY',topicKey:'diabetes',authority:'GLOBAL HEALTH OBSERVANCE',sourceType:'RECOGNIZED',priority:2},
+'11-15':{title:'WORLD PREMATURITY DAY',topicKey:'newborn',authority:'WHO GLOBAL PUBLIC HEALTH DAY',sourceType:'WHO',priority:2},
+'11-17':{title:'WORLD CERVICAL CANCER ELIMINATION DAY',topicKey:'women-health',authority:'WHO GLOBAL PUBLIC HEALTH DAY',sourceType:'WHO',priority:2},
+'11-19':{title:'WORLD TOILET DAY — SANITATION & HEALTH',topicKey:'hand-hygiene',authority:'UN HEALTH & SANITATION OBSERVANCE',sourceType:'UN',priority:2},
+'12-01':{title:'WORLD AIDS DAY',topicKey:'hiv-aids',authority:'WHO GLOBAL PUBLIC HEALTH DAY',sourceType:'WHO',priority:2},
+'12-03':{title:'INTERNATIONAL DAY OF PERSONS WITH DISABILITIES',topicKey:'disability-inclusion',authority:'WHO INDIA / UN HEALTH & INCLUSION',sourceType:'UN',priority:2},
+'12-12':{title:'UNIVERSAL HEALTH COVERAGE DAY',topicKey:'health-access',authority:'WHO INDIA HEALTH CAMPAIGN',sourceType:'WHO',priority:2}
+};
+
+const HEALTH_OBSERVANCES_BY_YEAR = {
+2026:{
+'03-12':{title:'WORLD KIDNEY DAY',topicKey:'kidney',authority:'GLOBAL HEALTH OBSERVANCE',sourceType:'RECOGNIZED',priority:2}
+},
+2027:{
+'03-11':{title:'WORLD KIDNEY DAY',topicKey:'kidney',authority:'GLOBAL HEALTH OBSERVANCE',sourceType:'RECOGNIZED',priority:2}
+}
+};
+
+const HEALTH_FALLBACK_LIBRARY = [
+['heart','BRISK WALK FOR HEART FITNESS'],['heart','DAILY CARDIO MOVEMENT'],['heart','DANCE FOR HEART HEALTH'],['heart','ACTIVE COMMUTE FOR FITNESS'],
+['yoga','MORNING YOGA FLOW'],['yoga','GENTLE YOGA FOR MOBILITY'],['yoga','YOGA FOR BALANCE'],['yoga','EVENING YOGA RESET'],
+['ageing','BALANCE TRAINING HABIT'],['ageing','DAILY MOBILITY PRACTICE'],['ageing','FLEXIBILITY FOR HEALTHY AGEING'],['ageing','SAFE LEG-STRENGTH PRACTICE'],
+['road-safety','SAFE CYCLING HABIT'],['road-safety','HELMET & VISIBILITY CHECK'],['road-safety','ACTIVE COMMUTE SAFELY'],
+['mental','MUSIC FOR RELAXATION'],['mental','MINDFUL BREATHING BREAK'],['mental','SCREEN-FREE MENTAL RESET'],['mental','GRATITUDE & SOCIAL CONNECTION'],
+['sleep','BETTER SLEEP ROUTINE'],['sleep','EVENING WIND-DOWN HABIT'],['sleep','MORNING LIGHT FOR BETTER SLEEP'],
+['nutrition','BALANCED BREAKFAST HABIT'],['nutrition','FIBRE-RICH PLATE'],['nutrition','SMART HEALTHY SNACKING'],['nutrition','HEALTHY PROTEIN CHOICES'],['nutrition','FRUIT & VEGETABLE VARIETY'],
+['water','DAILY HYDRATION HABIT'],['water','SAFE DRINKING WATER'],['water','HYDRATE DURING EXERCISE'],
+['blood-pressure','LOW-SALT DAY'],['blood-pressure','CHECK YOUR BLOOD PRESSURE'],['blood-pressure','MOVE TO SUPPORT BLOOD PRESSURE'],
+['diabetes','AFTER-MEAL WALK'],['diabetes','SMART CARBOHYDRATE CHOICES'],['diabetes','HEALTHY WEIGHT HABITS'],
+['respiratory','BREATHING & LUNG FITNESS'],['respiratory','CLEAN AIR HEALTH HABITS'],['respiratory','WALK FOR LUNG HEALTH'],
+['oral','TWO-MINUTE BRUSHING HABIT'],['oral','SUGAR-SMART ORAL HEALTH'],
+['eye','20-20-20 SCREEN BREAK'],['eye','OUTDOOR TIME FOR EYE COMFORT'],
+['hearing','SAFE LISTENING HABIT'],['hearing','QUIET BREAKS FOR YOUR EARS'],
+['hand-hygiene','HANDWASHING AT KEY TIMES'],['food-safety','SAFE HOME FOOD PREPARATION'],
+['first-aid','BASIC FIRST-AID READINESS'],['occupational','HEALTHY POSTURE AT WORK'],['occupational','MOVE EVERY HOUR AT WORK'],
+['women-health','WOMEN’S PREVENTIVE HEALTH'],['men-health','MEN’S PREVENTIVE HEALTH'],
+['child','ACTIVE PLAY FOR CHILD HEALTH'],['maternal','MATERNAL WELLNESS HABIT'],
+['cancer','CANCER PREVENTION HABITS'],['anaemia','IRON-RICH FOOD HABIT'],
+['kidney','KIDNEY-FRIENDLY DAILY HABITS'],['mosquito','MOSQUITO-BITE PREVENTION'],
+['tobacco','TOBACCO-FREE DAY'],['alcohol','ALCOHOL-SMART HEALTH CHOICES']
+];
+
+const HEALTH_FALLBACK_PHASES = ['START','ROUTINE','BUILD','CONSISTENCY','RESET','FAMILY'];
+
+function healthBaseForKey(key,config){
+ const ref=config.referenceTopics.find(x=>x.id===key);
+ if(ref)return {kind:'reference',base:ref,family:({hepatitis:'liver',heart:'heart',blood:'blood-donation',yoga:'yoga',mental:'mental-health',tobacco:'tobacco',nutrition:'healthy-food',water:'safe-water'})[key]||key};
+ const profile=config.profiles.find(x=>x.id===key);
+ if(!profile)throw new Error(`Health calendar profile missing: ${key}`);
+ return {kind:'profile',base:profile,family:PROFILE_FAMILY[key]||profile.family};
+}
+
+
+function curatedHealthContent(topicKey,title){
+ const T=title.replace(/\s+—\s+(START|ROUTINE|BUILD|CONSISTENCY|RESET|FAMILY)$/,'');
+ const library={
+  heart:{
+   summary:'Regular aerobic movement helps support heart fitness, stamina and circulation. Build activity gradually and make movement part of everyday life.',
+   closing:'Move regularly for a stronger, healthier heart.',
+   emphasis:'Consistency matters more than intensity.',
+   actions:[
+    ['MOVE WITH PURPOSE','Choose brisk walking, dancing, cycling or another aerobic activity you enjoy. Build duration gradually.'],
+    ['WARM UP FIRST','Start with a few minutes of easy movement before increasing pace, especially if you have been inactive.'],
+    ['LISTEN TO YOUR BODY','Slow down or stop for chest pain, unusual breathlessness, dizziness or other concerning symptoms.'],
+    ['MAKE IT ROUTINE','Schedule activity into your day and aim for regular movement across the week.']
+   ]},
+  yoga:{
+   summary:'Gentle yoga can support flexibility, balance, posture, breathing and mental well-being when practised safely and regularly.',
+   closing:'Move with awareness. Breathe with ease.',
+   emphasis:'Comfortable, controlled movement is the goal.',
+   actions:[
+    ['BEGIN GENTLY','Start with simple poses and movements that match your mobility and fitness level.'],
+    ['BREATHE STEADILY','Use relaxed breathing and avoid straining, prolonged breath-holding or forcing a pose.'],
+    ['IMPROVE MOBILITY','Focus on comfortable range of motion for the spine, shoulders, hips and ankles.'],
+    ['ADAPT SAFELY','Use support or qualified guidance if you are older, pregnant, injured or living with a health condition.']
+   ]},
+  ageing:{
+   summary:'Strength, balance, mobility and flexibility help preserve independence and reduce the risk of falls as we age.',
+   closing:'Stay mobile, stay strong, stay independent.',
+   emphasis:'Small daily movement protects long-term function.',
+   actions:[
+    ['PRACTISE BALANCE','Use safe balance exercises near a stable support and progress gradually.'],
+    ['KEEP LEGS STRONG','Include chair rises, supported squats or other suitable lower-body strengthening.'],
+    ['MOVE YOUR JOINTS','Use gentle mobility exercises for ankles, hips, shoulders and spine every day.'],
+    ['MAKE HOME SAFER','Good lighting, clear walkways and appropriate footwear help reduce falls.']
+   ]},
+  'road-safety':{
+   summary:'Cycling and active travel support fitness, but safety equipment, visibility and road awareness are essential.',
+   closing:'Be active—and arrive safely.',
+   emphasis:'Fitness and safety should always travel together.',
+   actions:[
+    ['WEAR A HELMET','Use a well-fitting certified helmet whenever you cycle.'],
+    ['BE VISIBLE','Use bright clothing, reflectors and lights when visibility is reduced.'],
+    ['FOLLOW ROAD RULES','Ride predictably, signal turns and respect traffic controls and safe road positioning.'],
+    ['CHECK YOUR CYCLE','Keep brakes, tyres, chain and lights in safe working condition.']
+   ]},
+  mental:{
+   summary:'Music, breathing, mindful pauses and social connection can support emotional balance and provide healthy ways to reset during a busy day.',
+   closing:'Give your mind regular space to recover.',
+   emphasis:'Mental well-being benefits from daily care.',
+   actions:[
+    ['TAKE A CALMING PAUSE','Spend a few minutes with slow breathing, quiet reflection or relaxing music.'],
+    ['STAY CONNECTED','Make time for supportive conversations and meaningful social contact.'],
+    ['LIMIT OVERLOAD','Take planned breaks from continuous screens, news and work demands.'],
+    ['SEEK HELP EARLY','Persistent distress, sleep problems or difficulty functioning deserve professional support.']
+   ]},
+  sleep:{
+   summary:'A regular sleep routine supports concentration, mood, metabolism and physical recovery.',
+   closing:'Protect your sleep as part of your health routine.',
+   emphasis:'Regular timing helps the body prepare for rest.',
+   actions:[
+    ['KEEP A REGULAR TIME','Try to sleep and wake at similar times on most days.'],
+    ['WIND DOWN','Reduce stimulating work and screens before bedtime and create a calm pre-sleep routine.'],
+    ['USE MORNING LIGHT','Daylight after waking helps reinforce the body clock and daytime alertness.'],
+    ['REVIEW PERSISTENT PROBLEMS','Seek medical advice for ongoing insomnia, loud snoring or excessive daytime sleepiness.']
+   ]},
+  nutrition:{
+   summary:'Balanced meals built from vegetables, fruit, whole grains, pulses and healthy protein support energy, fibre and long-term health.',
+   closing:'Better food choices add up—one meal at a time.',
+   emphasis:'Choose variety, balance and sensible portions.',
+   actions:[
+    ['BUILD A BALANCED PLATE','Include vegetables or fruit, a quality protein source and suitable whole-grain or high-fibre foods.'],
+    ['CHOOSE MORE FIBRE','Use vegetables, fruit, pulses, beans, whole grains, nuts and seeds regularly.'],
+    ['LIMIT ULTRA-PROCESSED FOOD','Reduce foods high in added sugar, salt and unhealthy fats.'],
+    ['PLAN SIMPLE MEALS','Keep healthy staple foods available so nutritious choices are easier on busy days.']
+   ]},
+  water:{
+   summary:'Adequate hydration supports physical performance, temperature control and normal body function. Needs vary with weather and activity.',
+   closing:'Drink regularly and choose safe water.',
+   emphasis:'Hydration needs rise with heat and exercise.',
+   actions:[
+    ['DRINK THROUGH THE DAY','Use thirst, activity and weather as practical guides and keep safe drinking water available.'],
+    ['HYDRATE FOR EXERCISE','Drink before and after activity and take fluids during longer or hotter sessions as needed.'],
+    ['CHOOSE WATER OFTEN','Prefer water over frequent sugary drinks for routine hydration.'],
+    ['WATCH FOR DEHYDRATION','Dark urine, marked thirst, dizziness or weakness can signal inadequate fluid intake.']
+   ]},
+  'blood-pressure':{
+   summary:'Regular activity, lower salt intake, healthy weight and blood-pressure checks help protect the heart, brain and kidneys.',
+   closing:'Know your pressure. Protect your future.',
+   emphasis:'High blood pressure can be silent.',
+   actions:[
+    ['CHECK YOUR PRESSURE','Measure blood pressure correctly and keep a record when monitoring is advised.'],
+    ['REDUCE EXCESS SALT','Limit salty packaged foods and taste food before adding extra salt.'],
+    ['MOVE REGULARLY','Walking and other suitable aerobic activities can support blood-pressure control.'],
+    ['TAKE TREATMENT CONSISTENTLY','If prescribed medicines, take them as directed and attend follow-up appointments.']
+   ]},
+  diabetes:{
+   summary:'Movement after meals, balanced carbohydrate choices and healthy weight habits can support blood-glucose control.',
+   closing:'Small daily choices support steadier blood sugar.',
+   emphasis:'Regular habits matter every day.',
+   actions:[
+    ['WALK AFTER MEALS','A short comfortable walk after meals can add useful daily activity.'],
+    ['CHOOSE HIGH-FIBRE CARBS','Prefer whole grains, pulses, vegetables and minimally processed carbohydrate sources.'],
+    ['WATCH PORTIONS','Balance total carbohydrate portions with protein, vegetables and healthy fats.'],
+    ['KNOW YOUR NUMBERS','If you have diabetes or increased risk, follow recommended glucose and medical monitoring.']
+   ]},
+  respiratory:{
+   summary:'Regular activity, clean air and tobacco avoidance support lung health and everyday breathing fitness.',
+   closing:'Protect your lungs with clean air and regular movement.',
+   emphasis:'Breathing health benefits from prevention.',
+   actions:[
+    ['STAY ACTIVE','Use walking or other suitable aerobic activity to build stamina gradually.'],
+    ['AVOID TOBACCO SMOKE','Keep indoor and shared spaces free from tobacco smoke and aerosols.'],
+    ['IMPROVE AIR QUALITY','Ventilate appropriately and reduce avoidable exposure to dust, fumes and indoor pollutants.'],
+    ['SEEK CARE FOR WARNING SIGNS','Persistent cough, wheeze, breathlessness or chest symptoms deserve medical assessment.']
+   ]},
+  oral:{
+   summary:'Twice-daily brushing, less frequent sugar exposure and regular dental care help prevent tooth decay and gum disease.',
+   closing:'Healthy teeth begin with simple daily habits.',
+   emphasis:'Prevention is easier than repair.',
+   actions:[
+    ['BRUSH TWICE DAILY','Brush thoroughly with fluoride toothpaste, especially before bedtime.'],
+    ['CLEAN BETWEEN TEETH','Use appropriate interdental cleaning where recommended.'],
+    ['LIMIT FREQUENT SUGAR','Reduce repeated sugary snacks and drinks between meals.'],
+    ['GET DENTAL CARE','Arrange dental review for pain, bleeding gums, persistent ulcers or other concerns.']
+   ]},
+  eye:{
+   summary:'Regular screen breaks, comfortable lighting and outdoor time can reduce eye strain and support visual comfort.',
+   closing:'Give your eyes regular breaks.',
+   emphasis:'Frequent short breaks are better than waiting for strain.',
+   actions:[
+    ['USE THE 20-20-20 RULE','Every 20 minutes, look about 20 feet away for at least 20 seconds.'],
+    ['BLINK OFTEN','Conscious blinking can reduce dryness during prolonged screen use.'],
+    ['SET UP SCREENS WELL','Use comfortable viewing distance, suitable text size and reduced glare.'],
+    ['GET EYE CHECKS','Seek assessment for persistent blur, pain, flashes, sudden visual change or other concerns.']
+   ]},
+  hearing:{
+   summary:'Safe listening levels and quiet breaks help reduce preventable noise-related hearing damage.',
+   closing:'Turn it down today to hear better tomorrow.',
+   emphasis:'Loud sound damage can build gradually.',
+   actions:[
+    ['LOWER THE VOLUME','Keep personal audio at a comfortable level rather than near maximum output.'],
+    ['TAKE QUIET BREAKS','Give your ears recovery time after noisy environments or prolonged headphone use.'],
+    ['USE HEARING PROTECTION','Wear appropriate protection around hazardous occupational or recreational noise.'],
+    ['CHECK PERSISTENT SYMPTOMS','Tinnitus, muffled hearing or difficulty understanding speech warrants hearing assessment.']
+   ]},
+  'hand-hygiene':{
+   summary:'Good hand hygiene interrupts the spread of many infections and protects households, workplaces and communities.',
+   closing:'Clean hands are a simple protective habit.',
+   emphasis:'Wash at the moments that matter.',
+   actions:[
+    ['USE SOAP AND WATER','Wash thoroughly when hands are visibly dirty and at key hygiene moments.'],
+    ['CLEAN BEFORE FOOD','Clean hands before preparing, serving or eating food.'],
+    ['CLEAN AFTER TOILET USE','Handwashing after toilet use and cleaning activities helps prevent faecal-oral infection.'],
+    ['DRY HANDS WELL','Dry hands with a clean method after washing.']
+   ]},
+  'food-safety':{
+   summary:'Clean preparation, safe temperatures and separation of raw and cooked foods reduce food-borne illness.',
+   closing:'Prepare food safely from kitchen to plate.',
+   emphasis:'Clean, separate, cook and store safely.',
+   actions:[
+    ['KEEP SURFACES CLEAN','Wash hands, utensils and food-contact surfaces before and during preparation.'],
+    ['SEPARATE RAW FOODS','Keep raw meat, fish and eggs away from ready-to-eat foods.'],
+    ['COOK THOROUGHLY','Cook food adequately, especially meat, poultry, eggs and reheated leftovers.'],
+    ['STORE SAFELY','Refrigerate perishable foods promptly and avoid prolonged unsafe temperatures.']
+   ]},
+  'first-aid':{
+   summary:'Basic first-aid knowledge helps people respond safely while professional medical help is being arranged.',
+   closing:'Prepare now so you can act safely in an emergency.',
+   emphasis:'Safety first, then appropriate first aid.',
+   actions:[
+    ['CHECK FOR DANGER','Make sure the scene is safe before approaching an injured or unwell person.'],
+    ['CALL FOR HELP','Contact emergency services promptly for serious illness or injury.'],
+    ['LEARN BASIC SKILLS','Obtain recognised training in CPR, bleeding control and common first-aid situations.'],
+    ['KEEP A FIRST-AID KIT','Maintain a simple, accessible kit and check supplies periodically.']
+   ]},
+  occupational:{
+   summary:'Healthy posture, regular movement and ergonomic adjustments can reduce discomfort during prolonged desk or standing work.',
+   closing:'Move often and set up work to fit your body.',
+   emphasis:'The best posture is the next posture.',
+   actions:[
+    ['CHANGE POSITION OFTEN','Avoid staying in one posture for long periods; stand, stretch or walk regularly.'],
+    ['SET UP YOUR WORKSPACE','Adjust screen, chair and work height to reduce unnecessary neck, shoulder and back strain.'],
+    ['USE MICRO-BREAKS','Take brief movement breaks throughout the workday rather than relying on one long break.'],
+    ['ADDRESS PERSISTENT PAIN','Ongoing pain, numbness or weakness deserves professional assessment.']
+   ]},
+  'women-health':{
+   summary:'Preventive care, menstrual health awareness and timely screening support women’s health across different life stages.',
+   closing:'Make preventive health part of routine care.',
+   emphasis:'Early attention can prevent complications.',
+   actions:[
+    ['KEEP ROUTINE CHECK-UPS','Use age- and risk-appropriate preventive visits and screening.'],
+    ['TRACK IMPORTANT CHANGES','Seek care for unusual bleeding, persistent pain, breast changes or other concerning symptoms.'],
+    ['SUPPORT BONE HEALTH','Use suitable weight-bearing activity and adequate nutrition across adulthood.'],
+    ['PROTECT MENTAL WELL-BEING','Sleep, social support and timely help for distress are important parts of health.']
+   ]},
+  'men-health':{
+   summary:'Routine preventive care, activity and early attention to symptoms help men protect long-term health.',
+   closing:'Prevention works best before symptoms become serious.',
+   emphasis:'Do not delay important health checks.',
+   actions:[
+    ['KNOW YOUR RISK','Discuss blood pressure, diabetes, cardiovascular and age-related screening with a clinician.'],
+    ['STAY ACTIVE','Combine regular aerobic movement with strength-building activity.'],
+    ['SEEK CARE EARLY','Do not ignore persistent pain, urinary symptoms, unexplained weight change or other concerns.'],
+    ['PROTECT MENTAL HEALTH','Talk early about persistent stress, low mood, sleep problems or harmful substance use.']
+   ]},
+  child:{
+   summary:'Active play, nourishing food, adequate sleep and preventive care support healthy growth and development.',
+   closing:'Healthy routines help children grow, learn and thrive.',
+   emphasis:'Daily habits shape lifelong health.',
+   actions:[
+    ['ENCOURAGE ACTIVE PLAY','Give children regular age-appropriate opportunities for energetic movement and outdoor play.'],
+    ['BUILD BALANCED MEALS','Offer varied foods including vegetables, fruit, grains and suitable protein sources.'],
+    ['PROTECT SLEEP','Use age-appropriate regular sleep routines and reduce late-night screens.'],
+    ['KEEP PREVENTIVE CARE CURRENT','Follow recommended growth monitoring, vaccination and health checks.']
+   ]},
+  maternal:{
+   summary:'Healthy food, appropriate activity, antenatal care and prompt attention to warning signs support maternal well-being.',
+   closing:'Healthy mothers need regular care and support.',
+   emphasis:'Pregnancy care should be individualised.',
+   actions:[
+    ['ATTEND ANTENATAL CARE','Keep recommended appointments and tests throughout pregnancy.'],
+    ['EAT FOR HEALTH','Use balanced meals and prescribed supplements such as iron and folic acid when advised.'],
+    ['STAY SAFELY ACTIVE','Use pregnancy-appropriate activity unless a clinician advises otherwise.'],
+    ['KNOW WARNING SIGNS','Seek urgent care for heavy bleeding, severe headache, breathing difficulty, reduced fetal movement or other warning signs.']
+   ]},
+  cancer:{
+   summary:'Tobacco avoidance, healthy weight, physical activity, vaccination where applicable and timely screening can reduce cancer risk.',
+   closing:'Prevention and early detection save lives.',
+   emphasis:'Know your risks and act early.',
+   actions:[
+    ['AVOID TOBACCO','Do not smoke or use tobacco products and avoid second-hand smoke.'],
+    ['STAY ACTIVE & HEALTHY','Regular activity and healthy weight support overall cancer prevention.'],
+    ['USE RECOMMENDED VACCINES','HPV and hepatitis B vaccination can prevent infections linked to certain cancers.'],
+    ['FOLLOW SCREENING ADVICE','Use age- and risk-appropriate cancer screening and seek care for persistent warning symptoms.']
+   ]},
+  anaemia:{
+   summary:'Iron-rich foods and timely evaluation of fatigue or pallor can help prevent and identify iron-deficiency anaemia.',
+   closing:'Build iron-rich meals and treat the cause, not only the symptom.',
+   emphasis:'Anaemia deserves proper assessment.',
+   actions:[
+    ['CHOOSE IRON-RICH FOODS','Use pulses, beans, green leafy vegetables, fortified foods and suitable animal-source foods.'],
+    ['ADD VITAMIN C','Pair plant iron sources with vitamin-C-rich foods to improve absorption.'],
+    ['FOLLOW SUPPLEMENT ADVICE','Use iron or folic-acid supplements when prescribed, especially in pregnancy or diagnosed deficiency.'],
+    ['CHECK PERSISTENT SYMPTOMS','Fatigue, pallor, breathlessness or recurrent anaemia requires medical evaluation.']
+   ]},
+  kidney:{
+   summary:'Blood-pressure and diabetes control, hydration and careful medicine use help protect kidney health.',
+   closing:'Protect your kidneys by protecting your overall health.',
+   emphasis:'Kidney disease may develop silently.',
+   actions:[
+    ['CONTROL BLOOD PRESSURE','Monitor and treat high blood pressure as advised.'],
+    ['MANAGE DIABETES','Good glucose control helps reduce kidney damage in people with diabetes.'],
+    ['USE MEDICINES SAFELY','Avoid unnecessary or prolonged use of medicines that may harm the kidneys.'],
+    ['GET CHECKED IF AT RISK','People with diabetes, hypertension or other risks may need kidney-function and urine testing.']
+   ]},
+  mosquito:{
+   summary:'Removing stagnant water, preventing bites and seeking early care for fever help reduce mosquito-borne illness.',
+   closing:'Stop mosquitoes before they spread disease.',
+   emphasis:'Prevention starts around the home.',
+   actions:[
+    ['REMOVE STAGNANT WATER','Empty, cover or clean containers where mosquitoes can breed.'],
+    ['PREVENT BITES','Use suitable repellents, clothing, screens or bed nets according to local risk.'],
+    ['KEEP SURROUNDINGS CLEAN','Manage waste and water storage so breeding sites do not develop.'],
+    ['SEEK CARE FOR FEVER','Persistent fever, bleeding, severe weakness or warning symptoms require prompt medical assessment.']
+   ]},
+  tobacco:{
+   summary:'Every tobacco-free day supports heart and lung health. Planning and evidence-based support improve quit success.',
+   closing:'Choose clean air. Choose a tobacco-free life.',
+   emphasis:'Quitting starts helping from the first day.',
+   actions:[
+    ['SET A QUIT PLAN','Choose a quit date and remove tobacco products and related cues.'],
+    ['KNOW YOUR TRIGGERS','Plan healthier responses for stress, social cues and routine tobacco use.'],
+    ['USE PROVEN SUPPORT','Counselling and approved medicines can improve the chance of quitting successfully.'],
+    ['KEEP SPACES SMOKE-FREE','Protect family and others from second-hand tobacco smoke.']
+   ]},
+  alcohol:{
+   summary:'Reducing alcohol exposure supports sleep, liver health, safety and overall well-being. Less is safer for health.',
+   closing:'Choose habits that support clear thinking and long-term health.',
+   emphasis:'Alcohol is not required for a healthy lifestyle.',
+   actions:[
+    ['USE ALCOHOL-FREE OPTIONS','Choose water, non-alcoholic drinks or other alternatives in social settings.'],
+    ['AVOID RISKY SITUATIONS','Never combine alcohol with driving, hazardous work or activities requiring coordination.'],
+    ['NOTICE YOUR PATTERN','Frequent or increasing use, cravings or loss of control deserve attention.'],
+    ['ASK FOR SUPPORT','Seek professional help if reducing or stopping alcohol is difficult or withdrawal is a concern.']
+   ]}
+ };
+ const c=library[topicKey]||library.heart;
+ return {
+  category:'DAILY HEALTH & FITNESS',
+  authority:'HEALTH & FITNESS',
+  title,
+  heroSummary:c.summary,
+  closing:c.closing,
+  emphasis:c.emphasis,
+  actions:c.actions.map((a,i)=>({number:i+1,heading:a[0],description:a[1],artwork:['a1','a2','a3','a4'][i],artworkRole:roleFor(a[0]+' '+a[1])}))
+ };
+}
+
+function healthRecord(iso,spec,config,occurrence=1){
+ const key=spec.topicKey, resolved=healthBaseForKey(key,config), b=resolved.base;
+ if(spec.sourceType==='CURATED'){
+  const c=curatedHealthContent(key,spec.title);
+  return recordArtwork({
+   id:`${iso}-${key}`,
+   topicKey:key,
+   isoDate:iso,
+   date:displayDate(iso),
+   category:c.category,
+   authority:c.authority,
+   title:c.title,
+   heroSummary:c.heroSummary,
+   closing:c.closing,
+   emphasis:c.emphasis,
+   palette:b.palette,
+   sourceType:'CURATED',
+   actions:c.actions,
+   occurrence
+  },resolved.family);
+ }
+ if(resolved.kind==='reference'){
+  return recordArtwork({...b,id:`${iso}-${key}`,topicKey:key,isoDate:iso,date:displayDate(iso),title:spec.title||b.title,authority:spec.authority||b.authority,sourceType:spec.sourceType||b.sourceType||'CURATED',occurrence},resolved.family);
+ }
+ return recordArtwork({id:`${iso}-${key}`,topicKey:key,isoDate:iso,date:displayDate(iso),category:b.category,authority:spec.authority||b.authority,title:spec.title||b.title,heroSummary:b.summary,closing:b.closing,emphasis:b.emphasis,palette:b.palette,sourceType:spec.sourceType||b.sourceType||'CURATED',actions:b.actions,occurrence},resolved.family);
+}
+
 const YEAR_CONFIG={
- 2026:{referenceTopics:REFERENCE_TOPICS,referenceByMonthDay:REF_BY_MD,monthPools:MONTH_POOLS,profiles:PROFILES},
- 2027:{referenceTopics:REFERENCE_TOPICS,referenceByMonthDay:REF_BY_MD,monthPools:MONTH_POOLS,profiles:PROFILES}
+ 2026:{referenceTopics:REFERENCE_TOPICS,referenceByMonthDay:REF_BY_MD,monthPools:MONTH_POOLS,profiles:PROFILES,validated:true},
+ 2027:{referenceTopics:REFERENCE_TOPICS_2027,referenceByMonthDay:REF_BY_MD_2027,monthPools:MONTH_POOLS,profiles:PROFILES,validated:true}
 };
 const SUPPORTED_YEARS=Object.keys(YEAR_CONFIG).filter(year=>YEAR_CONFIG[year]).map(Number).sort((a,b)=>a-b);
 const LATEST_SUPPORTED_YEAR=SUPPORTED_YEARS.at(-1);
@@ -177,20 +626,44 @@ function isLeapYear(year){return year%4===0&&(year%100!==0||year%400===0)}
 function calendarDates(year){const dates=[];for(let d=new Date(Date.UTC(year,0,1));d.getUTCFullYear()===year;d.setUTCDate(d.getUTCDate()+1))dates.push(new Date(d));return dates}
 function isoDate(d){return d.toISOString().slice(0,10)}function displayDate(iso){return new Date(iso+'T12:00:00').toLocaleDateString('en-GB',{day:'2-digit',month:'long',year:'numeric'}).toUpperCase()}
 const PROFILE_FAMILY=CANONICAL_PROFILE_FAMILY;
-const TOPIC_COMPATIBILITY={hepatitis:['liver','hepatitis'],heart:['heart'],'blood-pressure':['blood-pressure','heart'],diabetes:['diabetes'],'blood':['blood-donation','blood'],yoga:['yoga','exercise'],mental:['mental-health','mental'],tobacco:['tobacco'],nutrition:['healthy-food','nutrition'],'water':['safe-water','water'],cancer:['cancer'],tuberculosis:['tuberculosis','respiratory-health'],mosquito:['malaria-dengue','mosquito'],maternal:['maternal-health','pregnancy'],newborn:['newborn'],child:['child-health'],vaccination:['vaccination'],oral:['oral-health'],eye:['eye-health'],hearing:['hearing','mental-health'],kidney:['kidney'],anaemia:['anaemia','blood-donation'],sleep:['sleep','mental-health'],ageing:['healthy-ageing'],['road-safety']:['road-safety'],['first-aid']:['first-aid','blood-donation'],['food-safety']:['food-safety','healthy-food'],heat:['heat-health','safe-water'],['hand-hygiene']:['hand-hygiene'],respiratory:['respiratory-health','tuberculosis'],alcohol:['alcohol'],['organ-donation']:['organ-donation','blood-donation'],occupational:['occupational-health','road-safety'],['women-health']:['women-health','maternal-health'],['men-health']:['men-health','blood-pressure']};
-const HERO_COMPATIBILITY={hepatitis:['liver'],heart:['cardiovascular'],'blood-pressure':['blood-pressure'],diabetes:['diabetes'],blood:['blood-donation'],yoga:['yoga'],mental:['mental-health'],tobacco:['tobacco'],nutrition:['nutrition'],water:['safe-water'],cancer:['cancer'],tuberculosis:['respiratory-infection'],mosquito:['mosquito-borne'],maternal:['maternal'],newborn:['newborn'],child:['child'],vaccination:['vaccination'],oral:['oral-health'],eye:['eye-health'],hearing:['hearing'],kidney:['kidney'],anaemia:['anaemia'],sleep:['sleep'],ageing:['healthy-ageing'],['road-safety']:['road-safety'],['first-aid']:['first-aid'],['food-safety']:['food-safety'],heat:['heat-health'],['hand-hygiene']:['hand-hygiene'],respiratory:['respiratory-health'],alcohol:['alcohol-harm'],['organ-donation']:['organ-donation'],occupational:['occupational-health'],['women-health']:['women-health'],['men-health']:['men-health']};
+const TOPIC_COMPATIBILITY={hepatitis:['liver','hepatitis'],heart:['heart'],'blood-pressure':['blood-pressure','heart'],diabetes:['diabetes'],'blood':['blood-donation','blood'],yoga:['yoga','exercise'],mental:['mental-health','mental'],tobacco:['tobacco'],nutrition:['healthy-food','nutrition'],'water':['safe-water','water'],cancer:['cancer'],tuberculosis:['tuberculosis','respiratory-health'],mosquito:['malaria-dengue','mosquito'],maternal:['maternal-health','pregnancy'],newborn:['newborn'],child:['child-health'],vaccination:['vaccination'],oral:['oral-health'],eye:['eye-health'],hearing:['hearing','mental-health'],kidney:['kidney'],anaemia:['anaemia','blood-donation'],sleep:['sleep','mental-health'],ageing:['healthy-ageing'],['road-safety']:['road-safety'],['first-aid']:['first-aid','blood-donation'],['food-safety']:['food-safety','healthy-food'],heat:['heat-health','safe-water'],['hand-hygiene']:['hand-hygiene'],respiratory:['respiratory-health','tuberculosis'],alcohol:['alcohol'],['organ-donation']:['organ-donation','blood-donation'],occupational:['occupational-health','road-safety'],['women-health']:['women-health','maternal-health'],['men-health']:['men-health','blood-pressure'],'hiv-aids':['cancer'],'drowning-safety':['safe-water'],'general-health':['brain'],zoonoses:['malaria-dengue'],'health-access':['first-aid'],'disability-inclusion':['healthy-ageing'],nursing:['vaccination'],'pharmacy-safety':['vaccination'],'patient-safety':['blood-pressure']};
+const HERO_COMPATIBILITY={hepatitis:['liver'],heart:['cardiovascular'],'blood-pressure':['blood-pressure'],diabetes:['diabetes'],blood:['blood-donation'],yoga:['yoga'],mental:['mental-health'],tobacco:['tobacco'],nutrition:['nutrition'],water:['safe-water'],cancer:['cancer'],tuberculosis:['respiratory-infection'],mosquito:['mosquito-borne'],maternal:['maternal'],newborn:['newborn'],child:['child'],vaccination:['vaccination'],oral:['oral-health'],eye:['eye-health'],hearing:['hearing'],kidney:['kidney'],anaemia:['anaemia'],sleep:['sleep'],ageing:['healthy-ageing'],['road-safety']:['road-safety'],['first-aid']:['first-aid'],['food-safety']:['food-safety'],heat:['heat-health'],['hand-hygiene']:['hand-hygiene'],respiratory:['respiratory-health'],alcohol:['alcohol-harm'],['organ-donation']:['organ-donation'],occupational:['occupational-health'],['women-health']:['women-health'],['men-health']:['men-health'],'hiv-aids':['cancer'],'drowning-safety':['safe-water'],'general-health':['brain'],zoonoses:['mosquito-borne'],'health-access':['first-aid'],'disability-inclusion':['healthy-ageing'],nursing:['vaccination'],'pharmacy-safety':['vaccination'],'patient-safety':['blood-pressure']};
 const FILE_SEMANTIC_GROUPS=[['art-heart-v1.png'],['art-blood-pressure-v1.png'],['art-diabetes-v1.png'],['art-nutrition-v1.png'],['art-yoga-v1.png'],['art-mental-v1.png'],['art-tuberculosis-v1.png'],['art-tobacco-v1.png'],['art-hepatitis-v1.png'],['art-kidney-v1.png'],['art-blood-v1.png'],['art-vaccination-v1.png'],['art-cancer-v1.png'],['art-oral-health-v1.png'],['art-eye-health-v1.png'],['art-maternal-health-v1.png'],['art-newborn-v1.png'],['art-child-health-v1.png'],['art-healthy-ageing-v1.png'],['art-malaria-dengue-v1.png'],['art-water-v1.png'],['art-hand-hygiene-v1.png'],['art-road-safety-v1.png']];
 const ROLE_COMPATIBILITY={food:['food','hydration'],exercise:['exercise','wellness'],screening:['screening','doctor'],vaccination:['vaccination','doctor'],hygiene:['hygiene','prevention'],doctor:['doctor','screening'],sleep:['sleep','mental-support'],prevention:['prevention','safety','hygiene'],awareness:['awareness','mental-support'],safety:['safety','prevention'],maternal:['maternal','doctor'],child:['child','doctor'],donation:['donation','doctor'],respiratory:['respiratory','prevention'],wellness:['wellness','exercise','awareness']};
 const ACTION_ROLE_METADATA={hepatitis:['food','exercise','screening','awareness'],heart:['exercise','food','sleep','screening'],blood:['screening','food','donation','donation'],yoga:['wellness','respiratory','exercise','doctor'],mental:['awareness','sleep','screening','doctor'],tobacco:['prevention','prevention','doctor','prevention'],nutrition:['food','food','food','prevention'],water:['hygiene','hygiene','food','hygiene'],'blood-pressure':['screening','awareness','food','doctor'],diabetes:['food','exercise','screening','doctor'],cancer:['prevention','screening','screening','awareness'],tuberculosis:['screening','respiratory','doctor','screening'],mosquito:['hygiene','prevention','doctor','awareness'],maternal:['maternal','food','screening','maternal'],newborn:['child','child','hygiene','doctor'],child:['screening','vaccination','exercise','doctor'],vaccination:['vaccination','awareness','doctor','vaccination'],oral:['hygiene','hygiene','food','doctor'],eye:['screening','prevention','prevention','doctor'],hearing:['awareness','prevention','screening','doctor'],kidney:['screening','screening','prevention','food'],anaemia:['food','food','doctor','screening'],sleep:['sleep','sleep','sleep','doctor'],ageing:['exercise','screening','safety','awareness'],'road-safety':['safety','safety','safety','safety'],'first-aid':['safety','safety','doctor','safety'],'food-safety':['hygiene','prevention','food','food'],heat:['food','prevention','doctor','doctor'],'hand-hygiene':['hygiene','hygiene','hygiene','prevention'],respiratory:['prevention','respiratory','hygiene','doctor'],alcohol:['prevention','safety','prevention','doctor'],'organ-donation':['awareness','awareness','awareness','prevention'],occupational:['safety','prevention','safety','awareness'],'women-health':['screening','screening','food','sleep'],'men-health':['screening','doctor','awareness','screening']};
 function recordArtwork(base,family){const f=ARTWORK_FAMILIES[family],declared=ACTION_ROLE_METADATA[base.topicKey]||[],actions=base.actions.map((a,i)=>{const heading=a.heading??a[0],description=a.description??a[1];return {number:i+1,heading,description,artwork:['a1','a2','a3','a4'][i],artworkKey:f.keys[`action${i+1}`],artworkRole:declared[i]||a.artworkRole||roleFor(heading+' '+description),visualRole:f.visualRoles[i]}});return {...base,artworkFamily:family,heroArtworkKey:f.keys.hero,heroRole:f.heroRole,actionArtworkKeys:actions.map(a=>a.artworkKey),art:f.file,artworkResolution:f.resolution,actions}}
-function buildCalendar(year){const config=YEAR_CONFIG[year];if(!config)throw new Error(`No validated calendar dataset for ${year}`);const out=[],occ=new Map(),familyFor=id=>({hepatitis:'liver',heart:'heart',blood:'blood-donation',yoga:'yoga',mental:'mental-health',tobacco:'tobacco',nutrition:'healthy-food',water:'safe-water'})[id]||id,curatedFor={heart:'road-safety',blood:'anaemia',yoga:'ageing',mental:'organ-donation',tobacco:'respiratory',nutrition:'food-safety',water:'kidney',hepatitis:'alcohol'};for(const d of calendarDates(year)){const iso=isoDate(d),md=iso.slice(5),ref=config.referenceByMonthDay.get(md);if(ref){out.push(recordArtwork({...ref,id:`${iso}-${ref.id}`,topicKey:ref.id,isoDate:iso,date:displayDate(iso)},familyFor(ref.id)));continue}const pool=config.monthPools[d.getUTCMonth()+1];let pid=pool[(d.getUTCDate()-1)%pool.length];if(config.referenceTopics.some(x=>x.id===pid))pid=curatedFor[pid];const p=config.profiles.find(x=>x.id===pid),n=(occ.get(pid)||0)+1;occ.set(pid,n);out.push(recordArtwork({id:`${iso}-${pid}`,topicKey:pid,isoDate:iso,date:displayDate(iso),category:p.category,authority:p.authority,title:p.title,heroSummary:p.summary,closing:p.closing,emphasis:p.emphasis,palette:p.palette,sourceType:p.sourceType,actions:p.actions,occurrence:n},PROFILE_FAMILY[pid]||p.family))}return out}
+function buildCalendar(year){
+ const config=YEAR_CONFIG[year];
+ if(!config)throw new Error(`No validated calendar dataset for ${year}`);
+ const out=[],occ=new Map(),fallbackOcc=new Map();
+ const yearObs=HEALTH_OBSERVANCES_BY_YEAR[year]||{};
+ let fallbackIndex=0;
+ for(const d of calendarDates(year)){
+  const iso=isoDate(d),md=iso.slice(5);
+  const obs=yearObs[md]||HEALTH_OBSERVANCES_COMMON[md];
+  if(obs){
+   const n=(occ.get(obs.topicKey)||0)+1;occ.set(obs.topicKey,n);
+   out.push(healthRecord(iso,obs,config,n));
+   continue;
+  }
+  const item=HEALTH_FALLBACK_LIBRARY[fallbackIndex%HEALTH_FALLBACK_LIBRARY.length];
+  fallbackIndex++;
+  const [topicKey,baseTitle]=item;
+  const n=(fallbackOcc.get(baseTitle)||0)+1;fallbackOcc.set(baseTitle,n);
+  const phase=n===1?'':` — ${HEALTH_FALLBACK_PHASES[(n-2)%HEALTH_FALLBACK_PHASES.length]}`;
+  const spec={topicKey,title:`${baseTitle}${phase}`,authority:'CURATED HEALTH & FITNESS MESSAGE',sourceType:'CURATED'};
+  const k=(occ.get(topicKey)||0)+1;occ.set(topicKey,k);
+  out.push(healthRecord(iso,spec,config,k));
+ }
+ return out;
+}
 let activeYear=SUPPORTED_YEARS.includes(new Date().getUTCFullYear())?new Date().getUTCFullYear():LATEST_SUPPORTED_YEAR,topics=buildCalendar(activeYear);
 const $=s=>document.querySelector(s),canvas=$('#poster'),ctx=canvas.getContext('2d',{alpha:false}),assets=new Map();let generatedFingerprint=null,lastQA=null,preparedPNG=null,generationSequence=0,productionStatus='DRAFT',makeStatus='Not configured',deliveryStatus='NOT_SENT',activeDelivery=null,drawAudit=[];
-const STORAGE={selection:'his2.selection',history:'his24.history',make:'his23.make',delivery:'his23.delivery',assetBase:'his23.assetBase',scheduler:'his23.scheduler',automation:'his23.automation',oneTap:'his24.onetap'},HISTORY_LIMIT=60,DELIVERY_HISTORY_LIMIT=60,MAX_DELIVERY_ATTEMPTS=3;
+const STORAGE={selection:'his2.selection',history:'his2.history',make:'his23.make',delivery:'his23.delivery',assetBase:'his23.assetBase'},HISTORY_LIMIT=30,DELIVERY_HISTORY_LIMIT=60,MAX_DELIVERY_ATTEMPTS=3;
 function safeRead(key,fallback){try{const value=JSON.parse(localStorage.getItem(key));return value??fallback}catch{return fallback}}
 function safeWrite(key,value){try{localStorage.setItem(key,JSON.stringify(value));return true}catch{return false}}
 function slug(value){return String(value).toLowerCase().normalize('NFKD').replace(/[^\w\s-]/g,'').trim().replace(/[\s_]+/g,'-').replace(/-+/g,'-')}
-function historyRecords(){let records=safeRead(STORAGE.history,null);if(!Array.isArray(records)){const legacy=safeRead('his2.history',[]);records=Array.isArray(legacy)?legacy:[];if(records.length)safeWrite(STORAGE.history,records.slice(-HISTORY_LIMIT))}return records.filter(r=>r&&typeof r==='object'&&!('blob' in r)&&!('png' in r)).slice(-HISTORY_LIMIT)}
+function historyRecords(){const records=safeRead(STORAGE.history,[]);return Array.isArray(records)?records.filter(r=>r&&typeof r==='object'&&!('blob' in r)&&!('png' in r)).slice(-HISTORY_LIMIT):[]}
 function saveSelection(){const t=currentTopic();safeWrite(STORAGE.selection,{date:t.isoDate,topicId:t.id,palette:$('#palette').value})}
 function addHistory(){try{const t=currentTopic(),records=historyRecords();records.push({date:t.isoDate,topicTitle:t.title,palette:$('#palette').value,generatedAt:new Date().toISOString(),fingerprint:generatedFingerprint,pngWidth:preparedPNG.meta.width,pngHeight:preparedPNG.meta.height,status:'READY'});safeWrite(STORAGE.history,records.slice(-HISTORY_LIMIT))}catch{}updateOperations()}
 function deliveryRecords(){const records=safeRead(STORAGE.delivery,[]);return Array.isArray(records)?records.filter(r=>r&&typeof r==='object'&&!('blob'in r)&&!('png'in r)).slice(-DELIVERY_HISTORY_LIMIT):[]}
@@ -207,7 +680,7 @@ closing:[49,1138,983,112],footer:[0,1270,1080,80]};
 function rr(x,y,w,h,r,fill,stroke,lw=2){ctx.beginPath();ctx.roundRect(x,y,w,h,r);if(fill){ctx.fillStyle=fill;ctx.fill()}if(stroke){ctx.lineWidth=lw;ctx.strokeStyle=stroke;ctx.stroke()}}
 function line(x1,y1,x2,y2,color,width=4){ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.strokeStyle=color;ctx.lineWidth=width;ctx.lineCap='round';ctx.stroke()}
 function text(t,x,y,size,color,weight='600',align='left'){ctx.font=`${weight} ${size}px Segoe UI,Arial`;ctx.fillStyle=color;ctx.textAlign=align;ctx.textBaseline='alphabetic';ctx.fillText(t,x,y)}
-function wrappedLines(t,max,size,weight='500'){ctx.font=`${weight} ${size}px Segoe UI,Arial`;let out=[],line='',str=String(t??'');for(const word of str.split(/\s+/)){const test=line?line+' '+word:word;if(ctx.measureText(test).width>max&&line){out.push(line);line=word}else line=test}if(line)out.push(line);return out}
+function wrappedLines(t,max,size,weight='500'){ctx.font=`${weight} ${size}px Segoe UI,Arial`;let out=[],line='';for(const word of t.split(/\s+/)){const test=line?line+' '+word:word;if(ctx.measureText(test).width>max&&line){out.push(line);line=word}else line=test}if(line)out.push(line);return out}
 function fitBlock(t,x,y,maxW,maxH,preferred,min,color,weight='600',lineHeight=1.24,maxLines=7){for(let s=preferred;s>=min;s--){const lines=wrappedLines(t,maxW,s,weight),h=lines.length*s*lineHeight,w=Math.max(...lines.map(v=>ctx.measureText(v).width));if(lines.length<=maxLines&&h<=maxH&&w<=maxW){ctx.font=`${weight} ${s}px Segoe UI,Arial`;ctx.fillStyle=color;ctx.textAlign='left';ctx.textBaseline='top';lines.forEach((v,i)=>ctx.fillText(v,x,y+i*s*lineHeight));return {ok:true,size:s,preferred,min,lines:lines.length,width:w,height:h,maxW,maxH}}}const lines=wrappedLines(t,maxW,min,weight);return {ok:false,size:min,preferred,min,lines:lines.length,width:Math.max(...lines.map(v=>ctx.measureText(v).width)),height:lines.length*min*lineHeight,maxW,maxH}}
 function fitSingle(t,x,y,maxW,preferred,min,color,weight='900',align='left'){for(let s=preferred;s>=min;s--){ctx.font=`${weight} ${s}px Segoe UI,Arial`;const w=ctx.measureText(t).width;if(w<=maxW){text(t,x,y,s,color,weight,align);return {ok:true,size:s,preferred,min,lines:1,width:w,height:s,maxW}}}return {ok:false,size:min,preferred,min,lines:1,width:ctx.measureText(t).width,height:min,maxW}}
 function shield(x,y,s,c){ctx.save();ctx.translate(x,y);ctx.scale(s,s);ctx.beginPath();ctx.moveTo(0,-50);ctx.lineTo(44,-34);ctx.lineTo(36,16);ctx.quadraticCurveTo(25,45,0,58);ctx.quadraticCurveTo(-25,45,-36,16);ctx.lineTo(-44,-34);ctx.closePath();ctx.fillStyle=c;ctx.fill();line(-18,3,-4,18,'#fff',7);line(-4,18,23,-16,'#fff',7);ctx.restore()}
@@ -219,8 +692,8 @@ function drawCard(a,x,y,p,img,metrics,statuses,resolution){rr(x,y,482,279,20,'#f
 function render(){
  const t=currentTopic(),p=currentPalette(),rec=assets.get(t.art),img=rec?.loaded?rec.img:null,metrics=[],statuses=[],ink='#1b2429';drawAudit=[];ctx.fillStyle='#fffdfa';ctx.fillRect(0,0,1080,1350);
  ctx.fillStyle=p.primary;ctx.fillRect(0,0,1080,74);shield(48,37,.37,'#fff');text('HEALTH AWARENESS',92,49,24,'#fff','850');text(t.date,1033,49,22,'#fff','800','right');
- text(t.category,52,117,17,p.primary,'850');metrics.push({field:'authority',...fitSingle(t.authority,52,177,440,45,28,p.deep,'900')});line(52,198,102,198,p.accent,4);
- metrics.push({field:'heroSummary',...fitBlock(t.heroSummary,52,223,423,150,25,18,ink,'600',1.28,6)});
+ text(t.category,52,117,17,p.primary,'850');metrics.push({field:'authority',...fitBlock(t.authority,52,158,440,58,28,18,p.deep,'900',1.18,2)});line(52,226,102,226,p.accent,4);
+ metrics.push({field:'heroSummary',...fitBlock(t.heroSummary,52,251,423,150,25,18,ink,'600',1.28,6)});
  rr(510,99,522,309,23,p.soft,p.line,2);if(img){cropRounded(img,crops.hero,526,114,490,279,18,'hero');statuses.push(t.artworkResolution)}else statuses.push(fallback(526,114,490,279,18,p));
  rr(49,426,983,87,20,p.soft,p.line,2);metrics.push({field:'title',...fitSingle(t.title,540,486,900,45,30,p.primary,'900','center')});line(447,499,633,499,p.accent,4);
  [[49,535],[550,535],[49,836],[550,836]].forEach((pos,i)=>drawCard(t.actions[i],...pos,p,img,metrics,statuses,t.artworkResolution));
@@ -262,7 +735,7 @@ async function inspectPNG(blob){const b=new Uint8Array(await blob.slice(0,24).ar
 function renderQADashboard(q,pngMeta){const rows=q?[['Output',q.gates.output,'1080×1350'],['Text Fit',q.gates.text,q.metrics.map(m=>`${m.field}:${m.size}px`).join(' · ')],['Geometry',q.gates.geometry,q.geometry.pass?'all regions valid':q.geometry.issues.join(', ')],['Artwork Loading',q.gates.artworkLoading,`${q.artwork.loaded}/5`],['Artwork Relevance',q.gates.artworkRelevance,'5/5 semantic roles'],['Origin Clean',q.gates.originClean,q.originClean.pass?`${q.originClean.resources[0]?.origin||'same origin'} · 5/5`:`${q.originClean.error} · ${q.originClean.offenders.join(', ')}`],['Resolution',q.gates.artworkResolution,q.artwork.resolution],['Asset Safety',q.gates.offlineAssets,q.gates.offlineAssets?'origin-clean local/blob artwork':'unsafe cross-origin artwork blocked'],['Contrast',q.gates.contrast,q.gates.contrast?'WCAG text gate passed':'contrast below 4.5'],['State',q.gates.state,q.gates.state?'current':'stale'],['PNG',q.gates.png,pngMeta?`READY · ${pngMeta.width}×${pngMeta.height} · ${pngMeta.bytes} bytes`:'not prepared']]:[['Output',false,'not generated'],['Text Fit',false,'not tested'],['Geometry',false,'not tested'],['Artwork Loading',false,assetStatus(currentTopic())],['Artwork Relevance',false,'not tested'],['Origin Clean',false,'not tested'],['Resolution',false,currentTopic().artworkResolution],['Asset Safety',false,'not tested'],['Contrast',false,'not tested'],['State',false,'not generated'],['PNG',false,'not prepared']];$('#qaRows').innerHTML=rows.map(([n,pass,d])=>`<div class="qa-row"><span>${n}</span><b class="${pass?'pass':'fail'}">${pass?'PASS':'FAIL'} · ${d}</b></div>`).join('')}
 async function generate(){const token=++generationSequence;preparedPNG=null;generatedFingerprint=null;$('#download').disabled=true;$('#sendMake').disabled=true;$('#generate').disabled=true;$('#regenerate').disabled=true;setProductionStatus('GENERATING','Generating current poster…');const q=qa();lastQA=q;if(!q.pass){renderQADashboard(q);if(token===generationSequence){$('#generate').disabled=false;$('#regenerate').disabled=false;setProductionStatus('FAILED','QA FAILED\n'+q.issues.join('\n'))}return q}try{const blob=await canvasBlob(),meta=await inspectPNG(blob);if(token!==generationSequence)throw new Error('Superseded generation');if(meta.width!==1080||meta.height!==1350)throw new Error(`PNG dimensions ${meta.width}×${meta.height}`);if(fingerprint()!==q.fingerprint)throw new Error('Selection changed during PNG preparation');preparedPNG={blob,meta,fingerprint:q.fingerprint,token};generatedFingerprint=q.fingerprint;q.gates.png=true;q.gates.state=true;q.pass=Object.values(q.gates).every(Boolean);lastQA=q;renderQADashboard(q,meta);$('#generate').disabled=false;$('#regenerate').disabled=false;if(q.pass){setProductionStatus('READY','ALL PRODUCTION GATES PASSED · PNG READY');addHistory()}else setProductionStatus('FAILED','PNG preparation gate failed');return q}catch(e){if(token!==generationSequence)return {...q,pass:false,superseded:true};preparedPNG=null;generatedFingerprint=null;q.gates.png=false;q.pass=false;q.issues.push(`PNG preparation: ${e.message}`);lastQA=q;$('#generate').disabled=false;$('#regenerate').disabled=false;renderQADashboard(q);setProductionStatus('FAILED',`PNG PREPARATION FAILED\n${e.message}`);return q}}
 async function regenerate(){invalidate('Regenerating current poster…');return generate()}
-function download(){if(productionStatus!=='READY'||!preparedPNG||generatedFingerprint!==fingerprint()||preparedPNG.fingerprint!==fingerprint()){invalidate('Generated state is stale. Generate Poster again.');return false}const a=document.createElement('a'),t=currentTopic(),url=URL.createObjectURL(preparedPNG.blob);a.download=`${t.isoDate}_${slug(t.title)}_${slug(currentPalette().name)}.png`;a.href=url;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);return true}
+function download(){if(productionStatus!=='READY'||!preparedPNG||generatedFingerprint!==fingerprint()||preparedPNG.fingerprint!==fingerprint()){invalidate('Generated state is stale. Generate Poster again.');return false}const a=document.createElement('a'),t=currentTopic(),url=URL.createObjectURL(preparedPNG.blob);a.download=`${t.isoDate}_${slug(t.title)}_${slug(palettes[$('#palette').value].name)}.png`;a.href=url;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);return true}
 function scheduledRunKey(t=currentTopic()){return `${t.isoDate}|08:00|poster.ready|${CONTENT_VERSION}|${ARTWORK_VERSION}|${RENDERER_VERSION}`}
 function manualRunKey(event,t=currentTopic(),productionIdentity=generatedFingerprint||fingerprint()){return `${t.isoDate}|manual|${event}|${productionIdentity}`}
 function buildAutomationPayload(event='poster.manual_send',attempt=1,runKey=null){const t=currentTopic(),scheduled=event==='poster.ready';return {schemaVersion:'2.0',event,source:'Health Infographic Studio',appVersion:RENDERER_VERSION,timezone:'Asia/Kolkata',generatedAt:new Date().toISOString(),scheduledFor:scheduled?`${t.isoDate}T08:00:00+05:30`:null,date:t.isoDate,topicId:t.id,title:t.title,category:t.category,authority:t.authority,palette:$('#palette').value,contentVersion:CONTENT_VERSION,artworkVersion:ARTWORK_VERSION,rendererVersion:RENDERER_VERSION,fingerprint:generatedFingerprint,qaStatus:lastQA?.pass?'PASS':'FAIL',productionStatus,pngWidth:preparedPNG?.meta.width||null,pngHeight:preparedPNG?.meta.height||null,deliveryAttempt:attempt,runKey:runKey||(scheduled?scheduledRunKey(t):manualRunKey(event,t))}}
@@ -320,16 +793,16 @@ const params=new URLSearchParams(location.search),requestedTopic=params.get('top
 activeYear=startupYear;topics=buildCalendar(activeYear);$('#yearSelect').value=String(activeYear);updateDateBounds();refillTopics();const storedTopic=topics.find(t=>t.id===storedSelection?.topicId&&t.isoDate===storedSelection?.date),todayTopic=topics.find(t=>t.isoDate===todayISO),startup=topics.find(t=>t.id===requestedTopic)||todayTopic||storedTopic||topics[0];
 $('#topic').value=startup.id;$('#datePicker').value=startup.isoDate;$('#monthFilter').value='0';$('#palette').value=palettes[requestedPalette]?requestedPalette:palettes[storedSelection?.palette]?storedSelection.palette:startup.palette;$('#makeUrl').value=typeof storedMake?.url==='string'?storedMake.url:'';$('#makeEnabled').checked=storedMake?.enabled===true;makeStatus=$('#makeUrl').value?'Configured':'Not configured';productionStatus='DRAFT';refreshMobileWeb();ensureAsset(startup).then(()=>{render();updateOperations();updateNavigationState();if(!SUPPORTED_YEARS.includes(todayYear)&&!storedTopic&&!requestedTopic)setProductionStatus('DRAFT',`Validated production calendar currently available through ${LATEST_SUPPORTED_YEAR}.`)});
 async function selectRecord(t,resetPalette=true){if(!t)return;$('#topic').value=t.id;$('#datePicker').value=t.isoDate;if(resetPalette)$('#palette').value=t.palette;invalidate();await ensureAsset(t);render();updateNavigationState()}
-$('#yearSelect').onchange=()=>switchYear(Number($('#yearSelect').value));$('#topic').onchange=()=>selectRecord(currentTopic());$('#datePicker').onchange=()=>{const val=$('#datePicker').value,year=Number(val.slice(0,4)),t=topics.find(x=>x.isoDate===val);if(t){if(year!==activeYear)switchYear(year,val);else selectRecord(t)}else{$('#status').className='status bad';$('#status').textContent=`No validated production calendar record exists for date ${val}. Valid dates are 2026-01-01 through 2027-12-31.`;updateOperations()}};$('#monthFilter').onchange=refillTopics;$('#topicSearch').oninput=refillTopics;
+$('#yearSelect').onchange=()=>switchYear(Number($('#yearSelect').value));$('#topic').onchange=()=>selectRecord(currentTopic());$('#datePicker').onchange=()=>selectRecord(topics.find(t=>t.isoDate===$('#datePicker').value));$('#monthFilter').onchange=refillTopics;$('#topicSearch').oninput=refillTopics;
 $('#prevDay').onclick=()=>{const i=topics.indexOf(currentTopic());if(i>0)selectRecord(topics[i-1])};$('#nextDay').onclick=()=>{const i=topics.indexOf(currentTopic());if(i>=0&&i<topics.length-1)selectRecord(topics[i+1])};$('#today').onclick=async()=>{if(!SUPPORTED_YEARS.includes(todayYear)){setProductionStatus('DRAFT',`Validated production calendar currently available through ${LATEST_SUPPORTED_YEAR}.`);return}if(activeYear!==todayYear)await switchYear(todayYear,todayISO);const t=topics.find(x=>x.isoDate===todayISO);if(t)selectRecord(t)};
 $('#palette').onchange=()=>invalidate();$('#generateToday').onclick=generateTodayPoster;$('#generate').onclick=generate;$('#regenerate').onclick=regenerate;$('#download').onclick=download;$('#sharePoster').onclick=sharePoster;$('#sendMake').onclick=()=>sendToMake(false);$('#retryMake').onclick=()=>sendToMake(true);$('#testMake').onclick=testMakeContract;$('#clearMake').onclick=clearMakeConfig;const saveMake=()=>{safeWrite(STORAGE.make,{url:$('#makeUrl').value.trim(),enabled:$('#makeEnabled').checked});makeStatus=$('#makeUrl').value.trim()?'Configured':'Not configured';updateOperations()};$('#makeUrl').oninput=saveMake;$('#makeEnabled').onchange=saveMake;$('#saveAssetBase').onclick=()=>{const value=$('#assetBaseUrl').value.trim();if(value)safeWrite(STORAGE.assetBase,value);else localStorage.removeItem(STORAGE.assetBase);assets.clear();invalidate(value?'Artwork override updated. Generate again.':'Artwork override cleared. Same-origin ./artwork/ restored.');refreshMobileWeb()};
 renderQADashboard(null);
 async function waitForAssets(timeout=15000){const start=Date.now();while([...assets.values()].some(a=>!a.loaded&&!a.failed)){if(Date.now()-start>timeout)throw new Error('Artwork load timeout');await new Promise(r=>setTimeout(r,50))}}
 function validateCalendar(year=activeYear,calendar=year===activeYear?topics:buildCalendar(year)){
- const defects=[],dates=new Set(),ids=new Set(),expected=calendarDates(year).map(isoDate),expectedCount=isLeapYear(year)?366:365;
+ const defects=[],dates=new Set(),ids=new Set(),titles=new Set(),expected=calendarDates(year).map(isoDate),expectedCount=isLeapYear(year)?366:365;
  if(calendar.length!==expectedCount)defects.push({date:'calendar',field:'count',message:`expected ${expectedCount}, found ${calendar.length}`});
- for(const t of calendar){if(dates.has(t.isoDate))defects.push({date:t.isoDate,field:'date',message:'duplicate date'});dates.add(t.isoDate);if(ids.has(t.id))defects.push({date:t.isoDate,field:'id',message:'duplicate topic id'});ids.add(t.id);if(!new RegExp(`^${year}-\\d{2}-\\d{2}$`).test(t.isoDate))defects.push({date:t.isoDate,field:'date',message:`invalid ${year} date`});for(const f of ['id','category','authority','title','heroSummary','closing','emphasis','palette','artworkFamily','sourceType','heroArtworkKey'])if(!t[f])defects.push({date:t.isoDate,field:f,message:'required value missing'});if(!['WHO','UN','GOV_INDIA','RECOGNIZED','CURATED'].includes(t.sourceType))defects.push({date:t.isoDate,field:'sourceType',message:'invalid source type'});if(!palettes[t.palette])defects.push({date:t.isoDate,field:'palette',message:'invalid palette'});if(!ARTWORK_FAMILIES[t.artworkFamily])defects.push({date:t.isoDate,field:'artworkFamily',message:'unresolvable family'});if(!['EXACT','CURATED_RELATED'].includes(t.artworkResolution))defects.push({date:t.isoDate,field:'artworkResolution',message:'production-blocking resolution'});if(t.actions?.length!==4)defects.push({date:t.isoDate,field:'actions',message:'exactly four actions required'});else t.actions.forEach((a,i)=>{for(const f of ['heading','description','artwork','artworkKey','artworkRole'])if(!a[f])defects.push({date:t.isoDate,field:`actions.${i+1}.${f}`,message:'required value missing'});if(!crops[a.artwork])defects.push({date:t.isoDate,field:`actions.${i+1}.artwork`,message:'unresolvable assignment'})})}
- for(const d of expected)if(!dates.has(d))defects.push({date:d,field:'date',message:'missing date'});return {pass:defects.length===0,year,leapYear:isLeapYear(year),expectedCount,count:calendar.length,uniqueDates:dates.size,uniqueIds:ids.size,defects}
+ for(const t of calendar){if(dates.has(t.isoDate))defects.push({date:t.isoDate,field:'date',message:'duplicate date'});dates.add(t.isoDate);if(ids.has(t.id))defects.push({date:t.isoDate,field:'id',message:'duplicate topic id'});ids.add(t.id);if(titles.has(t.title))defects.push({date:t.isoDate,field:'title',message:'duplicate daily title'});titles.add(t.title);if(!new RegExp(`^${year}-\\d{2}-\\d{2}$`).test(t.isoDate))defects.push({date:t.isoDate,field:'date',message:`invalid ${year} date`});for(const f of ['id','category','authority','title','heroSummary','closing','emphasis','palette','artworkFamily','sourceType','heroArtworkKey'])if(!t[f])defects.push({date:t.isoDate,field:f,message:'required value missing'});if(!['WHO','UN','GOV_INDIA','RECOGNIZED','CURATED'].includes(t.sourceType))defects.push({date:t.isoDate,field:'sourceType',message:'invalid source type'});if(!palettes[t.palette])defects.push({date:t.isoDate,field:'palette',message:'invalid palette'});if(!ARTWORK_FAMILIES[t.artworkFamily])defects.push({date:t.isoDate,field:'artworkFamily',message:'unresolvable family'});if(!['EXACT','CURATED_RELATED'].includes(t.artworkResolution))defects.push({date:t.isoDate,field:'artworkResolution',message:'production-blocking resolution'});if(t.actions?.length!==4)defects.push({date:t.isoDate,field:'actions',message:'exactly four actions required'});else t.actions.forEach((a,i)=>{for(const f of ['heading','description','artwork','artworkKey','artworkRole'])if(!a[f])defects.push({date:t.isoDate,field:`actions.${i+1}.${f}`,message:'required value missing'});if(!crops[a.artwork])defects.push({date:t.isoDate,field:`actions.${i+1}.artwork`,message:'unresolvable assignment'})})}
+ for(const d of expected)if(!dates.has(d))defects.push({date:d,field:'date',message:'missing date'});return {pass:defects.length===0,year,leapYear:isLeapYear(year),expectedCount,count:calendar.length,uniqueDates:dates.size,uniqueIds:ids.size,uniqueTitles:titles.size,defects}
 }
 function offlineAssetAudit(){const refs=topics.map(t=>t.art),unique=[...new Set(refs)],remote=unique.filter(f=>/^https?:|^\/\//i.test(f)),invalid=topics.filter(t=>!ARTWORK_FAMILIES[t.artworkFamily]||t.actionArtworkKeys?.length!==4);return {pass:remote.length===0&&invalid.length===0,totalReferences:refs.length,uniqueFiles:unique.length,remoteUrls:remote,invalidMappings:invalid.map(t=>t.isoDate)}}
 function semanticAudit(){const failed=[];for(const t of topics){if(!(TOPIC_COMPATIBILITY[t.topicKey]||[]).includes(t.artworkFamily))failed.push(`${t.isoDate}:family`);if(!(HERO_COMPATIBILITY[t.topicKey]||[]).includes(t.heroRole))failed.push(`${t.isoDate}:hero`);t.actions.forEach((a,i)=>{if(!a.artworkRole||!a.visualRole||!(ROLE_COMPATIBILITY[a.artworkRole]||[a.artworkRole]).includes(a.visualRole)||a.artworkKey!==['a1','a2','a3','a4'][i])failed.push(`${t.isoDate}:${i+1}`)})}return {pass:failed.length===0,passed:topics.length*6-failed.length,total:topics.length*6,failed}}
@@ -339,11 +812,11 @@ function repetitionAudit(){const flags=[];for(let i=1;i<topics.length;i++)if(top
 const REPRESENTATIVE_IDS=['hepatitis','heart','blood','yoga','mental','tobacco','diabetes','blood-pressure','maternal','newborn','child','cancer','tuberculosis','mosquito','vaccination','oral','eye','kidney','water','hand-hygiene','ageing','road-safety'];
 function representativeAudit(){const cases=REPRESENTATIVE_IDS.map(id=>{const t=topics.find(x=>x.id.endsWith(`-${id}`)),pass=!!t&&['EXACT','CURATED_RELATED'].includes(t.artworkResolution)&&t.actions.every(a=>a.artworkRole&&a.artworkKey);return {id,date:t?.isoDate,title:t?.title,family:t?.artworkFamily,resolution:t?.artworkResolution,pass}});return {pass:cases.every(x=>x.pass),passed:cases.filter(x=>x.pass).length,total:cases.length,cases}}
 function representativeSemanticAudit(){let exact=0,related=0,mismatch=0;const cards=[];for(const id of REPRESENTATIVE_IDS){const t=topics.find(x=>x.id.endsWith(`-${id}`));t.actions.forEach(a=>{const kind=a.artworkRole===a.visualRole?'EXACT':(ROLE_COMPATIBILITY[a.artworkRole]||[]).includes(a.visualRole)?'ACCEPTABLE_RELATED':'MISMATCH';if(kind==='EXACT')exact++;else if(kind==='ACCEPTABLE_RELATED')related++;else mismatch++;cards.push({date:t.isoDate,topic:t.title,action:a.number,actionRole:a.artworkRole,visualRole:a.visualRole,result:kind})})}return {pass:mismatch===0,total:cards.length,exact,acceptableRelated:related,mismatch,cards}}
-async function runRapidRaceSuite(){const a=topics.find(t=>t.isoDate==='2026-07-28'),b=topics.find(t=>t.isoDate==='2026-09-29'),c=topics.find(t=>t.topicKey==='diabetes');$('#topic').value=a.id;$('#palette').value=a.palette;invalidate('rapid A');const pa=generate();$('#topic').value=b.id;$('#palette').value=b.palette;invalidate('rapid B');const pb=generate();$('#topic').value=c.id;$('#palette').value=c.palette;invalidate('rapid C');const pc=generate();const [ra,rb,rc]=await Promise.all([pa,pb,pc]),rapid={pass:!!ra.superseded&&!!rb.superseded&&rc.pass&&generatedFingerprint===fingerprint()&&!$('#download').disabled,current:c.id};assets.delete(a.art);$('#topic').value=a.id;invalidate('asset race A');const old=loadAsset(a);$('#topic').value=c.id;invalidate('asset race C');await ensureAsset(c);await old.promise;const assetRace={pass:currentTopic().id===c.id&&$('#download').disabled&&preparedPNG===null,current:currentTopic().id};return {pass:rapid.pass&&assetRace.pass,rapid,assetRace}}
-async function runAcceptanceSuite(){
- if(activeYear!==2026)await switchYear(2026);const calendar=validateCalendar(2026,topics),original={year:activeYear,topic:$('#topic').value,palette:$('#palette').value},topicResults=[],paletteResults=[],dynamicYear={leap2024:isLeapYear(2024)&&calendarDates(2024).length===366,common2025:!isLeapYear(2025)&&calendarDates(2025).length===365,unsupported2027:false};try{buildCalendar(2027)}catch{dynamicYear.unsupported2027=true}dynamicYear.pass=dynamicYear.leap2024&&dynamicYear.common2025&&dynamicYear.unsupported2027;
+async function runRapidRaceSuite(){const a=topics.find(t=>t.isoDate===`${activeYear}-07-28`),b=topics.find(t=>t.isoDate===`${activeYear}-09-29`),c=topics.find(t=>t.topicKey==='diabetes');$('#topic').value=a.id;$('#palette').value=a.palette;invalidate('rapid A');const pa=generate();$('#topic').value=b.id;$('#palette').value=b.palette;invalidate('rapid B');const pb=generate();$('#topic').value=c.id;$('#palette').value=c.palette;invalidate('rapid C');const pc=generate();const [ra,rb,rc]=await Promise.all([pa,pb,pc]),rapid={pass:!!ra.superseded&&!!rb.superseded&&rc.pass&&generatedFingerprint===fingerprint()&&!$('#download').disabled,current:c.id};assets.delete(a.art);$('#topic').value=a.id;invalidate('asset race A');const old=loadAsset(a);$('#topic').value=c.id;invalidate('asset race C');await ensureAsset(c);await old.promise;const assetRace={pass:currentTopic().id===c.id&&$('#download').disabled&&preparedPNG===null,current:currentTopic().id};return {pass:rapid.pass&&assetRace.pass,rapid,assetRace}}
+async function runAcceptanceSuite(year=activeYear){
+ const original={year:activeYear,topic:$('#topic').value,palette:$('#palette').value};if(activeYear!==year)await switchYear(year);const calendar=validateCalendar(year,topics),topicResults=[],paletteResults=[],dynamicYear={leap2024:isLeapYear(2024)&&calendarDates(2024).length===366,common2025:!isLeapYear(2025)&&calendarDates(2025).length===365,supports2026:SUPPORTED_YEARS.includes(2026)&&buildCalendar(2026).length===365,supports2027:SUPPORTED_YEARS.includes(2027)&&buildCalendar(2027).length===365};dynamicYear.pass=dynamicYear.leap2024&&dynamicYear.common2025&&dynamicYear.supports2026&&dynamicYear.supports2027;
  for(const t of topics){$('#topic').value=t.id;$('#palette').value=t.palette;invalidate('365-day acceptance test');await ensureAsset(t);const q=await generate();topicResults.push({date:t.isoDate,topic:t.title,family:t.artworkFamily,resolution:t.artworkResolution,palette:t.palette,pass:q.pass,gates:{...q.gates},artwork:{...q.artwork},metrics:q.metrics.map(m=>({field:m.field,size:m.size,pass:m.ok})),issues:[...q.issues],png:preparedPNG?.meta||null})}
- const hep=topics.find(t=>t.isoDate==='2026-07-28'),heart=topics.find(t=>t.isoDate==='2026-09-29');
+ const hep=topics.find(t=>t.isoDate===`${year}-07-28`),heart=topics.find(t=>t.isoDate===`${year}-09-29`);
  for(const t of [hep,heart])for(const p of Object.keys(palettes)){$('#topic').value=t.id;$('#palette').value=p;invalidate('Palette acceptance test');await ensureAsset(t);const q=await generate();paletteResults.push({date:t.isoDate,topic:t.title,palette:p,pass:q.pass,gates:{...q.gates},fingerprint:q.fingerprint,issues:[...q.issues]})}
  $('#topic').value=hep.id;$('#palette').value='orange';invalidate('State test');await ensureAsset(hep);const q1=await generate(),f1=generatedFingerprint,e1=!$('#download').disabled;
  $('#palette').value='violet';invalidate('State test');const d1=$('#download').disabled&&preparedPNG===null;const q2=await generate(),f2=generatedFingerprint,e2=!$('#download').disabled&&f2!==f1;
@@ -358,17 +831,82 @@ async function runAcceptanceSuite(){
  if(activeYear!==original.year)await switchYear(original.year);$('#topic').value=original.topic;$('#palette').value=original.palette;invalidate('Acceptance suite complete. Generate current poster to download.');return result;
 }
 async function runStateSuite(){
- const hep=topics.find(t=>t.isoDate==='2026-07-28'),heart=topics.find(t=>t.isoDate==='2026-09-29');await ensureAsset(hep);await ensureAsset(heart);$('#topic').value=hep.id;$('#palette').value='orange';invalidate('State test');const q1=await generate(),f1=generatedFingerprint,e1=!$('#download').disabled,b1=preparedPNG;
+ const hep=topics.find(t=>t.isoDate===`${year}-07-28`),heart=topics.find(t=>t.isoDate===`${year}-09-29`);await ensureAsset(hep);await ensureAsset(heart);$('#topic').value=hep.id;$('#palette').value='orange';invalidate('State test');const q1=await generate(),f1=generatedFingerprint,e1=!$('#download').disabled,b1=preparedPNG;
  $('#palette').value='violet';invalidate('State test');const d1=$('#download').disabled&&preparedPNG===null;const q2=await generate(),f2=generatedFingerprint,e2=!$('#download').disabled&&f2!==f1,b2=preparedPNG;
  $('#topic').value=heart.id;$('#palette').value='clinical';invalidate('State test');const d2=$('#download').disabled&&preparedPNG===null;const q3=await generate(),f3=generatedFingerprint,e3=!$('#download').disabled&&f3!==f2,b3=preparedPNG;
  $('#topic').value=hep.id;invalidate('State test');const d3=$('#download').disabled&&preparedPNG===null;
  return {pass:q1.pass&&q2.pass&&q3.pass&&e1&&d1&&e2&&d2&&e3&&d3&&b1!==b2&&b2!==b3,hepatitisOrangeEnabled:e1,paletteChangeDisabled:d1,violetEnabled:e2,topicChangeDisabled:d2,heartEnabled:e3,returnDisabled:d3,doubleGeneration:b1!==b2&&b2!==b3&&f1!==f2&&f2!==f3,png:[b1?.meta,b2?.meta,b3?.meta]};
 }
-window.HealthInfographicStudio={version:'2.4-final-release',get topics(){return topics},get activeYear(){return activeYear},supportedYears:[...SUPPORTED_YEARS],yearConfig:YEAR_CONFIG,palettes,artworkFamilies:ARTWORK_FAMILIES,buildCalendar,calendarDates,isLeapYear,switchYear,render,qa,generate,regenerate,download,buildAutomationPayload,sendToMake,testMakeContract,handoffPreflight,manualRunKey,scheduledRunKey,deliveryRecords,historyRecords,assets,artworkDiagnostics,originCleanQA,validateCalendar,offlineAssetAudit,semanticAudit,assetInventory,duplicateArtworkAudit,repetitionAudit,representativeAudit,runAcceptanceSuite,runStateSuite,generateTodayPoster,sharePoster,assetUrl,kolkataTodayISO,getState:()=>({activeYear,supportedYears:[...SUPPORTED_YEARS],productionStatus,generationSequence,generatedFingerprint,current:fingerprint(),lastQA,preparedPNG:preparedPNG?.meta||null,historyCount:historyRecords().length,makeStatus,deliveryStatus,activeDelivery,deliveryHistoryCount:deliveryRecords().length,assetBase:normalizedAssetBase()})};
-if(params.get('suite')==='1')setTimeout(async()=>{try{const result=await runAcceptanceSuite(),pre=document.createElement('pre');pre.id='acceptanceResult';pre.dataset.json=JSON.stringify(result);pre.textContent=`2.4 MULTI-YEAR CANDIDATE\n\nOVERALL: ${result.summary.overall?'PASS':'FAIL'}\n2026 CALENDAR: ${result.summary.calendarPass?'PASS':'FAIL'}\nLEAP-YEAR ARCHITECTURE: ${result.summary.dynamicYearPass?'PASS':'FAIL'}\n365 RENDERS: ${result.summary.rendersPass?'PASS':'FAIL'}\nARTWORK RELEVANCE: ${result.summary.artworkPass?'PASS':'FAIL'}\nSEMANTIC ROLES: ${result.summary.semanticPass?'PASS':'FAIL'}\nDUPLICATE AUDIT: ${result.summary.duplicatePass?'PASS':'FAIL'}\nREPETITION: ${result.summary.repetitionPass?'PASS':'FAIL'}\nREPRESENTATIVES: ${result.summary.representativePass?'PASS':'FAIL'}\nPNG 1080×1350: ${result.summary.pngPass?'PASS':'FAIL'}\n12 PALETTES: ${result.summary.palettesPass?'PASS':'FAIL'}\nSTALE STATE: ${result.staleState.pass?'PASS':'FAIL'}\nDOUBLE GENERATION: ${result.doubleGeneration.pass?'PASS':'FAIL'}\nOFFLINE ASSETS: ${result.summary.offlineAssetsPass?'PASS':'FAIL'}`;document.body.appendChild(pre);console.log('ACCEPTANCE_JSON:'+JSON.stringify(result));document.title=`SUITE:${result.summary.overall?'PASS':'FAIL'}`}catch(e){const result={summary:{overall:false},error:e.message},pre=document.createElement('pre');pre.textContent=JSON.stringify(result);document.body.appendChild(pre);console.error('ACCEPTANCE_JSON:'+JSON.stringify(result));document.title='SUITE:FAIL'}},0);
-if(params.get('stateSuite')==='1')setTimeout(async()=>{const result=await runStateSuite(),pre=document.createElement('pre');pre.id='acceptanceResult';pre.dataset.json=JSON.stringify(result);pre.textContent=`STATE & DOUBLE-GENERATION SUITE\n\nOVERALL: ${result.pass?'PASS':'FAIL'}\nHEPATITIS ORANGE ENABLED: ${result.hepatitisOrangeEnabled?'PASS':'FAIL'}\nORANGE → VIOLET DISABLED: ${result.paletteChangeDisabled?'PASS':'FAIL'}\nVIOLET REGENERATED: ${result.violetEnabled?'PASS':'FAIL'}\nVIOLET → HEART DISABLED: ${result.topicChangeDisabled?'PASS':'FAIL'}\nHEART REGENERATED: ${result.heartEnabled?'PASS':'FAIL'}\nRETURN TO HEPATITIS DISABLED: ${result.returnDisabled?'PASS':'FAIL'}\nDOUBLE GENERATION: ${result.doubleGeneration?'PASS':'FAIL'}\nPNG DIMENSIONS: ${result.png.every(x=>x?.width===1080&&x?.height===1350)?'PASS':'FAIL'}`;document.body.appendChild(pre);document.title=`STATE:${result.pass?'PASS':'FAIL'}`},0);
+window.HealthInfographicStudio={version:'2.4-final-release.0',get topics(){return topics},get activeYear(){return activeYear},supportedYears:[...SUPPORTED_YEARS],yearConfig:YEAR_CONFIG,palettes,artworkFamilies:ARTWORK_FAMILIES,buildCalendar,calendarDates,isLeapYear,switchYear,render,qa,generate,regenerate,download,buildAutomationPayload,sendToMake,testMakeContract,handoffPreflight,manualRunKey,scheduledRunKey,deliveryRecords,historyRecords,assets,artworkDiagnostics,originCleanQA,validateCalendar,offlineAssetAudit,semanticAudit,assetInventory,duplicateArtworkAudit,repetitionAudit,representativeAudit,runAcceptanceSuite,runStateSuite,generateTodayPoster,sharePoster,assetUrl,kolkataTodayISO,getState:()=>({activeYear,supportedYears:[...SUPPORTED_YEARS],productionStatus,generationSequence,generatedFingerprint,current:fingerprint(),lastQA,preparedPNG:preparedPNG?.meta||null,historyCount:historyRecords().length,makeStatus,deliveryStatus,activeDelivery,deliveryHistoryCount:deliveryRecords().length,assetBase:normalizedAssetBase()})};
+if(params.get('suite')==='1')setTimeout(async()=>{try{const requestedSuiteYear=Number(params.get('year'))||activeYear;const result=await runAcceptanceSuite(requestedSuiteYear),pre=document.createElement('pre');pre.id='acceptanceResult';pre.dataset.json=JSON.stringify(result);pre.textContent=`2.4 FINAL RELEASE\n\nYEAR: ${result.calendar.year}\nOVERALL: ${result.summary.overall?'PASS':'FAIL'}\nCALENDAR: ${result.summary.calendarPass?'PASS':'FAIL'}\nLEAP-YEAR ARCHITECTURE: ${result.summary.dynamicYearPass?'PASS':'FAIL'}\n365 RENDERS: ${result.summary.rendersPass?'PASS':'FAIL'}\nARTWORK RELEVANCE: ${result.summary.artworkPass?'PASS':'FAIL'}\nSEMANTIC ROLES: ${result.summary.semanticPass?'PASS':'FAIL'}\nDUPLICATE AUDIT: ${result.summary.duplicatePass?'PASS':'FAIL'}\nREPETITION: ${result.summary.repetitionPass?'PASS':'FAIL'}\nREPRESENTATIVES: ${result.summary.representativePass?'PASS':'FAIL'}\nPNG 1080×1350: ${result.summary.pngPass?'PASS':'FAIL'}\n12 PALETTES: ${result.summary.palettesPass?'PASS':'FAIL'}\nSTALE STATE: ${result.staleState.pass?'PASS':'FAIL'}\nDOUBLE GENERATION: ${result.doubleGeneration.pass?'PASS':'FAIL'}\nOFFLINE ASSETS: ${result.summary.offlineAssetsPass?'PASS':'FAIL'}`;document.body.appendChild(pre);console.log('ACCEPTANCE_JSON:'+JSON.stringify(result));document.title=`SUITE:${result.summary.overall?'PASS':'FAIL'}`}catch(e){const result={summary:{overall:false},error:e.message},pre=document.createElement('pre');pre.textContent=JSON.stringify(result);document.body.appendChild(pre);console.error('ACCEPTANCE_JSON:'+JSON.stringify(result));document.title='SUITE:FAIL'}},0);
+if(params.get('stateSuite')==='1')setTimeout(async()=>{const requestedStateYear=Number(params.get('year'))||activeYear;const result=await runStateSuite(requestedStateYear),pre=document.createElement('pre');pre.id='acceptanceResult';pre.dataset.json=JSON.stringify(result);pre.textContent=`STATE & DOUBLE-GENERATION SUITE\n\nOVERALL: ${result.pass?'PASS':'FAIL'}\nHEPATITIS ORANGE ENABLED: ${result.hepatitisOrangeEnabled?'PASS':'FAIL'}\nORANGE → VIOLET DISABLED: ${result.paletteChangeDisabled?'PASS':'FAIL'}\nVIOLET REGENERATED: ${result.violetEnabled?'PASS':'FAIL'}\nVIOLET → HEART DISABLED: ${result.topicChangeDisabled?'PASS':'FAIL'}\nHEART REGENERATED: ${result.heartEnabled?'PASS':'FAIL'}\nRETURN TO HEPATITIS DISABLED: ${result.returnDisabled?'PASS':'FAIL'}\nDOUBLE GENERATION: ${result.doubleGeneration?'PASS':'FAIL'}\nPNG DIMENSIONS: ${result.png.every(x=>x?.width===1080&&x?.height===1350)?'PASS':'FAIL'}`;document.body.appendChild(pre);document.title=`STATE:${result.pass?'PASS':'FAIL'}`},0);
 
-if('serviceWorker' in navigator&&location.protocol.startsWith('http')){window.addEventListener('load',async()=>{try{await navigator.serviceWorker.register('./sw.js');const ready=await navigator.serviceWorker.ready;ready.active?.postMessage({type:'PRECACHE_ARTWORK'});}catch{}})}
+let deferredInstallPrompt=null;
+const installBtn=document.getElementById('installApp');
+
+function refreshInstallButton(){
+ if(!installBtn)return;
+ const standalone=window.matchMedia?.('(display-mode: standalone)').matches||window.navigator.standalone===true;
+ if(standalone){
+   installBtn.textContent='App Installed';
+   installBtn.disabled=true;
+   installBtn.classList.remove('install-ready');
+ }else if(deferredInstallPrompt){
+   installBtn.textContent='Install App';
+   installBtn.disabled=false;
+   installBtn.classList.add('install-ready');
+ }else{
+   installBtn.textContent='Install App';
+   installBtn.disabled=false;
+   installBtn.classList.remove('install-ready');
+ }
+}
+
+window.addEventListener('beforeinstallprompt',e=>{
+ e.preventDefault();
+ deferredInstallPrompt=e;
+ refreshInstallButton();
+});
+
+window.addEventListener('appinstalled',()=>{
+ deferredInstallPrompt=null;
+ refreshInstallButton();
+ setProductionStatus('DRAFT','Health Infographic Studio installed successfully.');
+});
+
+installBtn?.addEventListener('click',async()=>{
+ const standalone=window.matchMedia?.('(display-mode: standalone)').matches||window.navigator.standalone===true;
+ if(standalone)return;
+ if(deferredInstallPrompt){
+   deferredInstallPrompt.prompt();
+   await deferredInstallPrompt.userChoice.catch(()=>null);
+   deferredInstallPrompt=null;
+   refreshInstallButton();
+   return;
+ }
+ const isiOS=/iphone|ipad|ipod/i.test(navigator.userAgent);
+ const isHttp=location.protocol==='https:'||location.hostname==='localhost'||location.hostname==='127.0.0.1';
+ if(isiOS){
+   setProductionStatus('DRAFT','On iPhone/iPad: tap Share, then choose “Add to Home Screen”.');
+ }else if(!isHttp){
+   setProductionStatus('DRAFT','App installation requires the hosted HTTPS version (for example GitHub Pages), not a local file.');
+ }else{
+   setProductionStatus('DRAFT','Use your browser menu → Install app / Add to Home screen if the install prompt is not shown yet.');
+ }
+});
+
+refreshInstallButton();
+
+if('serviceWorker' in navigator&&location.protocol.startsWith('http')){
+window.addEventListener('load',async()=>{
+  try{
+    await navigator.serviceWorker.register('./sw.js',{scope:'./'});
+    await navigator.serviceWorker.ready;
+  }catch(e){
+    console.warn('2.4 service worker registration failed',e);
+  }
+});
+}
 
 </script>
 </body></html>
