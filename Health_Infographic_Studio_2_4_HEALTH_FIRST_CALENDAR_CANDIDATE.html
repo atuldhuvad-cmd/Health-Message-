@@ -103,7 +103,7 @@ canvas{display:block;width:100%;height:auto;background:#fff;border-radius:7px}.n
 <script>
 'use strict';
 window.addEventListener('error',e=>{const s=document.getElementById('status');if(s){s.className='status bad';s.textContent=`STARTUP ERROR: ${e.message} · line ${e.lineno}`};document.title=`STARTUP ERROR: ${e.message}`});
-const CONTENT_VERSION='2.1.0-health-first-calendar',ARTWORK_VERSION='2.0-production-artwork-1',RENDERER_VERSION='2.4-final-release.0';
+const CONTENT_VERSION='2.2.0-health-first-full-content',ARTWORK_VERSION='2.0-production-artwork-1',RENDERER_VERSION='2.4-final-release.0';
 const palettes={
 clinical:{name:'Clinical Blue–Green',primary:'#087f8c',deep:'#075164',accent:'#35b9a3',soft:'#eaf7f5',line:'#aadbd6'},
 emerald:{name:'Emerald Green',primary:'#087447',deep:'#075136',accent:'#76ae36',soft:'#eef8e9',line:'#b8d8aa'},
@@ -283,8 +283,324 @@ function healthBaseForKey(key,config){
  return {kind:'profile',base:profile,family:PROFILE_FAMILY[key]||profile.family};
 }
 
+
+function curatedHealthContent(topicKey,title){
+ const T=title.replace(/\s+—\s+(START|ROUTINE|BUILD|CONSISTENCY|RESET|FAMILY)$/,'');
+ const library={
+  heart:{
+   summary:'Regular aerobic movement helps support heart fitness, stamina and circulation. Build activity gradually and make movement part of everyday life.',
+   closing:'Move regularly for a stronger, healthier heart.',
+   emphasis:'Consistency matters more than intensity.',
+   actions:[
+    ['MOVE WITH PURPOSE','Choose brisk walking, dancing, cycling or another aerobic activity you enjoy. Build duration gradually.'],
+    ['WARM UP FIRST','Start with a few minutes of easy movement before increasing pace, especially if you have been inactive.'],
+    ['LISTEN TO YOUR BODY','Slow down or stop for chest pain, unusual breathlessness, dizziness or other concerning symptoms.'],
+    ['MAKE IT ROUTINE','Schedule activity into your day and aim for regular movement across the week.']
+   ]},
+  yoga:{
+   summary:'Gentle yoga can support flexibility, balance, posture, breathing and mental well-being when practised safely and regularly.',
+   closing:'Move with awareness. Breathe with ease.',
+   emphasis:'Comfortable, controlled movement is the goal.',
+   actions:[
+    ['BEGIN GENTLY','Start with simple poses and movements that match your mobility and fitness level.'],
+    ['BREATHE STEADILY','Use relaxed breathing and avoid straining, prolonged breath-holding or forcing a pose.'],
+    ['IMPROVE MOBILITY','Focus on comfortable range of motion for the spine, shoulders, hips and ankles.'],
+    ['ADAPT SAFELY','Use support or qualified guidance if you are older, pregnant, injured or living with a health condition.']
+   ]},
+  ageing:{
+   summary:'Strength, balance, mobility and flexibility help preserve independence and reduce the risk of falls as we age.',
+   closing:'Stay mobile, stay strong, stay independent.',
+   emphasis:'Small daily movement protects long-term function.',
+   actions:[
+    ['PRACTISE BALANCE','Use safe balance exercises near a stable support and progress gradually.'],
+    ['KEEP LEGS STRONG','Include chair rises, supported squats or other suitable lower-body strengthening.'],
+    ['MOVE YOUR JOINTS','Use gentle mobility exercises for ankles, hips, shoulders and spine every day.'],
+    ['MAKE HOME SAFER','Good lighting, clear walkways and appropriate footwear help reduce falls.']
+   ]},
+  'road-safety':{
+   summary:'Cycling and active travel support fitness, but safety equipment, visibility and road awareness are essential.',
+   closing:'Be active—and arrive safely.',
+   emphasis:'Fitness and safety should always travel together.',
+   actions:[
+    ['WEAR A HELMET','Use a well-fitting certified helmet whenever you cycle.'],
+    ['BE VISIBLE','Use bright clothing, reflectors and lights when visibility is reduced.'],
+    ['FOLLOW ROAD RULES','Ride predictably, signal turns and respect traffic controls and safe road positioning.'],
+    ['CHECK YOUR CYCLE','Keep brakes, tyres, chain and lights in safe working condition.']
+   ]},
+  mental:{
+   summary:'Music, breathing, mindful pauses and social connection can support emotional balance and provide healthy ways to reset during a busy day.',
+   closing:'Give your mind regular space to recover.',
+   emphasis:'Mental well-being benefits from daily care.',
+   actions:[
+    ['TAKE A CALMING PAUSE','Spend a few minutes with slow breathing, quiet reflection or relaxing music.'],
+    ['STAY CONNECTED','Make time for supportive conversations and meaningful social contact.'],
+    ['LIMIT OVERLOAD','Take planned breaks from continuous screens, news and work demands.'],
+    ['SEEK HELP EARLY','Persistent distress, sleep problems or difficulty functioning deserve professional support.']
+   ]},
+  sleep:{
+   summary:'A regular sleep routine supports concentration, mood, metabolism and physical recovery.',
+   closing:'Protect your sleep as part of your health routine.',
+   emphasis:'Regular timing helps the body prepare for rest.',
+   actions:[
+    ['KEEP A REGULAR TIME','Try to sleep and wake at similar times on most days.'],
+    ['WIND DOWN','Reduce stimulating work and screens before bedtime and create a calm pre-sleep routine.'],
+    ['USE MORNING LIGHT','Daylight after waking helps reinforce the body clock and daytime alertness.'],
+    ['REVIEW PERSISTENT PROBLEMS','Seek medical advice for ongoing insomnia, loud snoring or excessive daytime sleepiness.']
+   ]},
+  nutrition:{
+   summary:'Balanced meals built from vegetables, fruit, whole grains, pulses and healthy protein support energy, fibre and long-term health.',
+   closing:'Better food choices add up—one meal at a time.',
+   emphasis:'Choose variety, balance and sensible portions.',
+   actions:[
+    ['BUILD A BALANCED PLATE','Include vegetables or fruit, a quality protein source and suitable whole-grain or high-fibre foods.'],
+    ['CHOOSE MORE FIBRE','Use vegetables, fruit, pulses, beans, whole grains, nuts and seeds regularly.'],
+    ['LIMIT ULTRA-PROCESSED FOOD','Reduce foods high in added sugar, salt and unhealthy fats.'],
+    ['PLAN SIMPLE MEALS','Keep healthy staple foods available so nutritious choices are easier on busy days.']
+   ]},
+  water:{
+   summary:'Adequate hydration supports physical performance, temperature control and normal body function. Needs vary with weather and activity.',
+   closing:'Drink regularly and choose safe water.',
+   emphasis:'Hydration needs rise with heat and exercise.',
+   actions:[
+    ['DRINK THROUGH THE DAY','Use thirst, activity and weather as practical guides and keep safe drinking water available.'],
+    ['HYDRATE FOR EXERCISE','Drink before and after activity and take fluids during longer or hotter sessions as needed.'],
+    ['CHOOSE WATER OFTEN','Prefer water over frequent sugary drinks for routine hydration.'],
+    ['WATCH FOR DEHYDRATION','Dark urine, marked thirst, dizziness or weakness can signal inadequate fluid intake.']
+   ]},
+  'blood-pressure':{
+   summary:'Regular activity, lower salt intake, healthy weight and blood-pressure checks help protect the heart, brain and kidneys.',
+   closing:'Know your pressure. Protect your future.',
+   emphasis:'High blood pressure can be silent.',
+   actions:[
+    ['CHECK YOUR PRESSURE','Measure blood pressure correctly and keep a record when monitoring is advised.'],
+    ['REDUCE EXCESS SALT','Limit salty packaged foods and taste food before adding extra salt.'],
+    ['MOVE REGULARLY','Walking and other suitable aerobic activities can support blood-pressure control.'],
+    ['TAKE TREATMENT CONSISTENTLY','If prescribed medicines, take them as directed and attend follow-up appointments.']
+   ]},
+  diabetes:{
+   summary:'Movement after meals, balanced carbohydrate choices and healthy weight habits can support blood-glucose control.',
+   closing:'Small daily choices support steadier blood sugar.',
+   emphasis:'Regular habits matter every day.',
+   actions:[
+    ['WALK AFTER MEALS','A short comfortable walk after meals can add useful daily activity.'],
+    ['CHOOSE HIGH-FIBRE CARBS','Prefer whole grains, pulses, vegetables and minimally processed carbohydrate sources.'],
+    ['WATCH PORTIONS','Balance total carbohydrate portions with protein, vegetables and healthy fats.'],
+    ['KNOW YOUR NUMBERS','If you have diabetes or increased risk, follow recommended glucose and medical monitoring.']
+   ]},
+  respiratory:{
+   summary:'Regular activity, clean air and tobacco avoidance support lung health and everyday breathing fitness.',
+   closing:'Protect your lungs with clean air and regular movement.',
+   emphasis:'Breathing health benefits from prevention.',
+   actions:[
+    ['STAY ACTIVE','Use walking or other suitable aerobic activity to build stamina gradually.'],
+    ['AVOID TOBACCO SMOKE','Keep indoor and shared spaces free from tobacco smoke and aerosols.'],
+    ['IMPROVE AIR QUALITY','Ventilate appropriately and reduce avoidable exposure to dust, fumes and indoor pollutants.'],
+    ['SEEK CARE FOR WARNING SIGNS','Persistent cough, wheeze, breathlessness or chest symptoms deserve medical assessment.']
+   ]},
+  oral:{
+   summary:'Twice-daily brushing, less frequent sugar exposure and regular dental care help prevent tooth decay and gum disease.',
+   closing:'Healthy teeth begin with simple daily habits.',
+   emphasis:'Prevention is easier than repair.',
+   actions:[
+    ['BRUSH TWICE DAILY','Brush thoroughly with fluoride toothpaste, especially before bedtime.'],
+    ['CLEAN BETWEEN TEETH','Use appropriate interdental cleaning where recommended.'],
+    ['LIMIT FREQUENT SUGAR','Reduce repeated sugary snacks and drinks between meals.'],
+    ['GET DENTAL CARE','Arrange dental review for pain, bleeding gums, persistent ulcers or other concerns.']
+   ]},
+  eye:{
+   summary:'Regular screen breaks, comfortable lighting and outdoor time can reduce eye strain and support visual comfort.',
+   closing:'Give your eyes regular breaks.',
+   emphasis:'Frequent short breaks are better than waiting for strain.',
+   actions:[
+    ['USE THE 20-20-20 RULE','Every 20 minutes, look about 20 feet away for at least 20 seconds.'],
+    ['BLINK OFTEN','Conscious blinking can reduce dryness during prolonged screen use.'],
+    ['SET UP SCREENS WELL','Use comfortable viewing distance, suitable text size and reduced glare.'],
+    ['GET EYE CHECKS','Seek assessment for persistent blur, pain, flashes, sudden visual change or other concerns.']
+   ]},
+  hearing:{
+   summary:'Safe listening levels and quiet breaks help reduce preventable noise-related hearing damage.',
+   closing:'Turn it down today to hear better tomorrow.',
+   emphasis:'Loud sound damage can build gradually.',
+   actions:[
+    ['LOWER THE VOLUME','Keep personal audio at a comfortable level rather than near maximum output.'],
+    ['TAKE QUIET BREAKS','Give your ears recovery time after noisy environments or prolonged headphone use.'],
+    ['USE HEARING PROTECTION','Wear appropriate protection around hazardous occupational or recreational noise.'],
+    ['CHECK PERSISTENT SYMPTOMS','Tinnitus, muffled hearing or difficulty understanding speech warrants hearing assessment.']
+   ]},
+  'hand-hygiene':{
+   summary:'Good hand hygiene interrupts the spread of many infections and protects households, workplaces and communities.',
+   closing:'Clean hands are a simple protective habit.',
+   emphasis:'Wash at the moments that matter.',
+   actions:[
+    ['USE SOAP AND WATER','Wash thoroughly when hands are visibly dirty and at key hygiene moments.'],
+    ['CLEAN BEFORE FOOD','Clean hands before preparing, serving or eating food.'],
+    ['CLEAN AFTER TOILET USE','Handwashing after toilet use and cleaning activities helps prevent faecal-oral infection.'],
+    ['DRY HANDS WELL','Dry hands with a clean method after washing.']
+   ]},
+  'food-safety':{
+   summary:'Clean preparation, safe temperatures and separation of raw and cooked foods reduce food-borne illness.',
+   closing:'Prepare food safely from kitchen to plate.',
+   emphasis:'Clean, separate, cook and store safely.',
+   actions:[
+    ['KEEP SURFACES CLEAN','Wash hands, utensils and food-contact surfaces before and during preparation.'],
+    ['SEPARATE RAW FOODS','Keep raw meat, fish and eggs away from ready-to-eat foods.'],
+    ['COOK THOROUGHLY','Cook food adequately, especially meat, poultry, eggs and reheated leftovers.'],
+    ['STORE SAFELY','Refrigerate perishable foods promptly and avoid prolonged unsafe temperatures.']
+   ]},
+  'first-aid':{
+   summary:'Basic first-aid knowledge helps people respond safely while professional medical help is being arranged.',
+   closing:'Prepare now so you can act safely in an emergency.',
+   emphasis:'Safety first, then appropriate first aid.',
+   actions:[
+    ['CHECK FOR DANGER','Make sure the scene is safe before approaching an injured or unwell person.'],
+    ['CALL FOR HELP','Contact emergency services promptly for serious illness or injury.'],
+    ['LEARN BASIC SKILLS','Obtain recognised training in CPR, bleeding control and common first-aid situations.'],
+    ['KEEP A FIRST-AID KIT','Maintain a simple, accessible kit and check supplies periodically.']
+   ]},
+  occupational:{
+   summary:'Healthy posture, regular movement and ergonomic adjustments can reduce discomfort during prolonged desk or standing work.',
+   closing:'Move often and set up work to fit your body.',
+   emphasis:'The best posture is the next posture.',
+   actions:[
+    ['CHANGE POSITION OFTEN','Avoid staying in one posture for long periods; stand, stretch or walk regularly.'],
+    ['SET UP YOUR WORKSPACE','Adjust screen, chair and work height to reduce unnecessary neck, shoulder and back strain.'],
+    ['USE MICRO-BREAKS','Take brief movement breaks throughout the workday rather than relying on one long break.'],
+    ['ADDRESS PERSISTENT PAIN','Ongoing pain, numbness or weakness deserves professional assessment.']
+   ]},
+  'women-health':{
+   summary:'Preventive care, menstrual health awareness and timely screening support women’s health across different life stages.',
+   closing:'Make preventive health part of routine care.',
+   emphasis:'Early attention can prevent complications.',
+   actions:[
+    ['KEEP ROUTINE CHECK-UPS','Use age- and risk-appropriate preventive visits and screening.'],
+    ['TRACK IMPORTANT CHANGES','Seek care for unusual bleeding, persistent pain, breast changes or other concerning symptoms.'],
+    ['SUPPORT BONE HEALTH','Use suitable weight-bearing activity and adequate nutrition across adulthood.'],
+    ['PROTECT MENTAL WELL-BEING','Sleep, social support and timely help for distress are important parts of health.']
+   ]},
+  'men-health':{
+   summary:'Routine preventive care, activity and early attention to symptoms help men protect long-term health.',
+   closing:'Prevention works best before symptoms become serious.',
+   emphasis:'Do not delay important health checks.',
+   actions:[
+    ['KNOW YOUR RISK','Discuss blood pressure, diabetes, cardiovascular and age-related screening with a clinician.'],
+    ['STAY ACTIVE','Combine regular aerobic movement with strength-building activity.'],
+    ['SEEK CARE EARLY','Do not ignore persistent pain, urinary symptoms, unexplained weight change or other concerns.'],
+    ['PROTECT MENTAL HEALTH','Talk early about persistent stress, low mood, sleep problems or harmful substance use.']
+   ]},
+  child:{
+   summary:'Active play, nourishing food, adequate sleep and preventive care support healthy growth and development.',
+   closing:'Healthy routines help children grow, learn and thrive.',
+   emphasis:'Daily habits shape lifelong health.',
+   actions:[
+    ['ENCOURAGE ACTIVE PLAY','Give children regular age-appropriate opportunities for energetic movement and outdoor play.'],
+    ['BUILD BALANCED MEALS','Offer varied foods including vegetables, fruit, grains and suitable protein sources.'],
+    ['PROTECT SLEEP','Use age-appropriate regular sleep routines and reduce late-night screens.'],
+    ['KEEP PREVENTIVE CARE CURRENT','Follow recommended growth monitoring, vaccination and health checks.']
+   ]},
+  maternal:{
+   summary:'Healthy food, appropriate activity, antenatal care and prompt attention to warning signs support maternal well-being.',
+   closing:'Healthy mothers need regular care and support.',
+   emphasis:'Pregnancy care should be individualised.',
+   actions:[
+    ['ATTEND ANTENATAL CARE','Keep recommended appointments and tests throughout pregnancy.'],
+    ['EAT FOR HEALTH','Use balanced meals and prescribed supplements such as iron and folic acid when advised.'],
+    ['STAY SAFELY ACTIVE','Use pregnancy-appropriate activity unless a clinician advises otherwise.'],
+    ['KNOW WARNING SIGNS','Seek urgent care for heavy bleeding, severe headache, breathing difficulty, reduced fetal movement or other warning signs.']
+   ]},
+  cancer:{
+   summary:'Tobacco avoidance, healthy weight, physical activity, vaccination where applicable and timely screening can reduce cancer risk.',
+   closing:'Prevention and early detection save lives.',
+   emphasis:'Know your risks and act early.',
+   actions:[
+    ['AVOID TOBACCO','Do not smoke or use tobacco products and avoid second-hand smoke.'],
+    ['STAY ACTIVE & HEALTHY','Regular activity and healthy weight support overall cancer prevention.'],
+    ['USE RECOMMENDED VACCINES','HPV and hepatitis B vaccination can prevent infections linked to certain cancers.'],
+    ['FOLLOW SCREENING ADVICE','Use age- and risk-appropriate cancer screening and seek care for persistent warning symptoms.']
+   ]},
+  anaemia:{
+   summary:'Iron-rich foods and timely evaluation of fatigue or pallor can help prevent and identify iron-deficiency anaemia.',
+   closing:'Build iron-rich meals and treat the cause, not only the symptom.',
+   emphasis:'Anaemia deserves proper assessment.',
+   actions:[
+    ['CHOOSE IRON-RICH FOODS','Use pulses, beans, green leafy vegetables, fortified foods and suitable animal-source foods.'],
+    ['ADD VITAMIN C','Pair plant iron sources with vitamin-C-rich foods to improve absorption.'],
+    ['FOLLOW SUPPLEMENT ADVICE','Use iron or folic-acid supplements when prescribed, especially in pregnancy or diagnosed deficiency.'],
+    ['CHECK PERSISTENT SYMPTOMS','Fatigue, pallor, breathlessness or recurrent anaemia requires medical evaluation.']
+   ]},
+  kidney:{
+   summary:'Blood-pressure and diabetes control, hydration and careful medicine use help protect kidney health.',
+   closing:'Protect your kidneys by protecting your overall health.',
+   emphasis:'Kidney disease may develop silently.',
+   actions:[
+    ['CONTROL BLOOD PRESSURE','Monitor and treat high blood pressure as advised.'],
+    ['MANAGE DIABETES','Good glucose control helps reduce kidney damage in people with diabetes.'],
+    ['USE MEDICINES SAFELY','Avoid unnecessary or prolonged use of medicines that may harm the kidneys.'],
+    ['GET CHECKED IF AT RISK','People with diabetes, hypertension or other risks may need kidney-function and urine testing.']
+   ]},
+  mosquito:{
+   summary:'Removing stagnant water, preventing bites and seeking early care for fever help reduce mosquito-borne illness.',
+   closing:'Stop mosquitoes before they spread disease.',
+   emphasis:'Prevention starts around the home.',
+   actions:[
+    ['REMOVE STAGNANT WATER','Empty, cover or clean containers where mosquitoes can breed.'],
+    ['PREVENT BITES','Use suitable repellents, clothing, screens or bed nets according to local risk.'],
+    ['KEEP SURROUNDINGS CLEAN','Manage waste and water storage so breeding sites do not develop.'],
+    ['SEEK CARE FOR FEVER','Persistent fever, bleeding, severe weakness or warning symptoms require prompt medical assessment.']
+   ]},
+  tobacco:{
+   summary:'Every tobacco-free day supports heart and lung health. Planning and evidence-based support improve quit success.',
+   closing:'Choose clean air. Choose a tobacco-free life.',
+   emphasis:'Quitting starts helping from the first day.',
+   actions:[
+    ['SET A QUIT PLAN','Choose a quit date and remove tobacco products and related cues.'],
+    ['KNOW YOUR TRIGGERS','Plan healthier responses for stress, social cues and routine tobacco use.'],
+    ['USE PROVEN SUPPORT','Counselling and approved medicines can improve the chance of quitting successfully.'],
+    ['KEEP SPACES SMOKE-FREE','Protect family and others from second-hand tobacco smoke.']
+   ]},
+  alcohol:{
+   summary:'Reducing alcohol exposure supports sleep, liver health, safety and overall well-being. Less is safer for health.',
+   closing:'Choose habits that support clear thinking and long-term health.',
+   emphasis:'Alcohol is not required for a healthy lifestyle.',
+   actions:[
+    ['USE ALCOHOL-FREE OPTIONS','Choose water, non-alcoholic drinks or other alternatives in social settings.'],
+    ['AVOID RISKY SITUATIONS','Never combine alcohol with driving, hazardous work or activities requiring coordination.'],
+    ['NOTICE YOUR PATTERN','Frequent or increasing use, cravings or loss of control deserve attention.'],
+    ['ASK FOR SUPPORT','Seek professional help if reducing or stopping alcohol is difficult or withdrawal is a concern.']
+   ]}
+ };
+ const c=library[topicKey]||library.heart;
+ return {
+  category:'DAILY HEALTH & FITNESS',
+  authority:'HEALTH & FITNESS',
+  title,
+  heroSummary:c.summary,
+  closing:c.closing,
+  emphasis:c.emphasis,
+  actions:c.actions.map((a,i)=>({number:i+1,heading:a[0],description:a[1],artwork:['a1','a2','a3','a4'][i],artworkRole:roleFor(a[0]+' '+a[1])}))
+ };
+}
+
 function healthRecord(iso,spec,config,occurrence=1){
  const key=spec.topicKey, resolved=healthBaseForKey(key,config), b=resolved.base;
+ if(spec.sourceType==='CURATED'){
+  const c=curatedHealthContent(key,spec.title);
+  return recordArtwork({
+   id:`${iso}-${key}`,
+   topicKey:key,
+   isoDate:iso,
+   date:displayDate(iso),
+   category:c.category,
+   authority:c.authority,
+   title:c.title,
+   heroSummary:c.heroSummary,
+   closing:c.closing,
+   emphasis:c.emphasis,
+   palette:b.palette,
+   sourceType:'CURATED',
+   actions:c.actions,
+   occurrence
+  },resolved.family);
+ }
  if(resolved.kind==='reference'){
   return recordArtwork({...b,id:`${iso}-${key}`,topicKey:key,isoDate:iso,date:displayDate(iso),title:spec.title||b.title,authority:spec.authority||b.authority,sourceType:spec.sourceType||b.sourceType||'CURATED',occurrence},resolved.family);
  }
@@ -575,7 +891,7 @@ refreshInstallButton();
 if('serviceWorker' in navigator&&location.protocol.startsWith('http')){
 window.addEventListener('load',async()=>{
   try{
-    await navigator.serviceWorker.register('./sw-2.4.js',{scope:'./'});
+    await navigator.serviceWorker.register('./sw-health-first.js',{scope:'./'});
     await navigator.serviceWorker.ready;
   }catch(e){
     console.warn('2.4 candidate service worker registration failed',e);
