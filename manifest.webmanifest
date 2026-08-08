@@ -1,13 +1,13 @@
 {
   "name": "Health Infographic Studio 2.4",
   "short_name": "Health Studio 2.4",
-  "start_url": "./Health_Infographic_Studio_2_4_FINAL_RELEASE.html?mode=onetap",
+  "start_url": "./Health_Infographic_Studio_2_4_HEALTH_FIRST_CALENDAR_CANDIDATE.html?mode=onetap",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#07131c",
   "theme_color": "#087f8c",
-  "description": "Health Infographic Studio 2.4 Final Release.",
+  "description": "Health Infographic Studio 2.4 Health-First Calendar Candidate.",
   "icons": [
     {
       "src": "./health-studio-icon-192.png",
