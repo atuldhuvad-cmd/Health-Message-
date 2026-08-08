@@ -1,13 +1,13 @@
 {
   "name": "Health Infographic Studio 2.4",
   "short_name": "Health Studio 2.4",
-  "start_url": "./Health_Infographic_Studio_2_4_HEALTH_FIRST_CALENDAR_CANDIDATE.html?mode=onetap",
+  "start_url": "./Health_Infographic_Studio_2_4_2026_CALENDAR_FIXED.html?mode=onetap",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#07131c",
   "theme_color": "#087f8c",
-  "description": "Health Infographic Studio 2.4 Health-First Calendar Candidate.",
+  "description": "Health Infographic Studio 2.4 - Health-First Calendar, deterministic CSV-driven 2026 mapping.",
   "icons": [
     {
       "src": "./health-studio-icon-192.png",
